@@ -1,0 +1,205 @@
+/* Дополнительные стили для страницы выбираем вместе */
+
+.back-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: white;
+    border-bottom: 1px solid #f0f0f0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.back-btn {
+    font-size: 24px;
+    cursor: pointer;
+    color: #F41D91;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+
+.back-btn:active {
+    transform: scale(0.9);
+}
+
+.back-header .gradient-title {
+    font-size: 20px;
+    margin: 0;
+    flex: 1;
+}
+
+.choose-header {
+    padding: 24px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    margin-top: 12px;  /* ← ДОБАВЛЯЕМ ОТСТУП СВЕРХУ */
+}
+
+.choose-header p {
+    font-size: 14px;
+    opacity: 0.95;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.create-chat-btn {
+    background: white;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #F41D91;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border: 1px solid rgba(244, 29, 145, 0.2);
+}
+
+.create-chat-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.chats-section h2 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 16px;
+    padding-left: 4px;
+    font-weight: 600;
+}
+
+.chat-card {
+    background: white;
+    border-radius: 20px;
+    padding: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    border: 1px solid rgba(244, 29, 145, 0.1);
+    position: relative;
+}
+
+.chat-card:active {
+    transform: scale(0.98);
+    background: #fafafa;
+}
+
+.chat-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 28px;
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 20px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.chat-info {
+    flex: 1;
+}
+
+.chat-info h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.chat-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 8px;
+}
+
+.chat-meta i {
+    font-size: 12px;
+    margin-right: 4px;
+}
+
+.chat-action {
+    display: inline-block;
+    font-size: 13px;
+    color: #F41D91;
+    font-weight: 500;
+}
+
+.chat-action i {
+    font-size: 12px;
+    margin-left: 4px;
+}
+
+/* Кнопка удаления чата */
+.delete-chat-btn {
+    background: none;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #ccc;
+    flex-shrink: 0;
+}
+
+.delete-chat-btn:hover {
+    background: #fee;
+    color: #ff4444;
+}
+
+.delete-chat-btn:active {
+    transform: scale(0.9);
+    background: #ffdddd;
+    color: #ff0000;
+}
+
+.empty-chats {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+}
+
+.empty-chats i {
+    font-size: 56px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+    color: #F41D91;
+}
+
+.empty-chats p {
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.empty-chats p:first-of-type {
+    font-weight: 500;
+    color: #666;
+}

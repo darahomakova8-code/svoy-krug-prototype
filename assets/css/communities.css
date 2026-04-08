@@ -1,0 +1,514 @@
+/* ========== СТРАНИЦА СООБЩЕСТВ ========== */
+
+.communities-header {
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(244, 29, 145, 0.1);
+    z-index: 100;
+}
+
+.communities-header-top {
+    display: flex;
+ justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.communities-header-top h1 {
+    font-size: 24px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin: 0;
+}
+
+.header-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.header-actions i {
+    font-size: 22px;
+    color: #F41D91;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.header-actions i:active {
+    transform: scale(0.9);
+}
+
+/* Поисковая строка */
+.search-container {
+    margin-top: 8px;
+    margin-bottom: 12px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background: #f5f5f5;
+    border-radius: 30px;
+    padding: 10px 16px;
+    gap: 10px;
+    transition: all 0.2s;
+}
+
+.search-box i {
+    color: #F41D91;
+    font-size: 18px;
+}
+
+.search-box input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    outline: none;
+    font-family: inherit;
+}
+
+.search-box input::placeholder {
+    color: #bbb;
+}
+
+.search-box:focus-within {
+    background: white;
+    box-shadow: 0 0 0 2px rgba(244, 29, 145, 0.2);
+}
+
+/* Панель фильтров */
+.filter-panel {
+    background: white;
+    border-radius: 20px;
+    margin-top: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    display: none;
+    animation: fadeIn 0.2s ease;
+}
+
+.filter-panel.show {
+    display: block;
+}
+
+.filter-section {
+    margin-bottom: 16px;
+}
+
+.filter-section:last-child {
+    margin-bottom: 0;
+}
+
+.filter-section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #F41D91;
+    margin-bottom: 12px;
+}
+
+.filter-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.filter-tag {
+    background: #f5f5f5;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-tag.active {
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    color: white;
+}
+
+.filter-tag:active {
+    transform: scale(0.95);
+}
+
+/* Подзаголовок */
+.communities-subtitle {
+    font-size: 14px;
+    color: #666;
+    margin: 20px 0 16px 0;
+    text-align: center;
+}
+
+/* Кнопка создания сообщества */
+.create-community-btn {
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    border: none;
+    padding: 14px 24px;
+    border-radius: 40px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%;
+    margin-bottom: 24px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.create-community-btn:active {
+    transform: scale(0.98);
+}
+
+/* Карточка сообщества */
+.community-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    transition: all 0.2s;
+    border: 1px solid rgba(244, 29, 145, 0.1);
+    cursor: pointer;
+}
+
+.community-card:active {
+    transform: scale(0.99);
+}
+
+.community-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.community-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+}
+
+.community-status {
+    font-size: 12px;
+    font-weight: 600;
+    color: #4CAF50;
+    background: rgba(76, 175, 80, 0.1);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.community-description {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.community-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.members-count {
+    font-size: 13px;
+    color: #999;
+}
+
+.details-link {
+    color: #F41D91;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Пустое состояние */
+.empty-state {
+    text-align: center;
+    padding: 48px 20px;
+    color: #999;
+}
+
+.empty-state i {
+    font-size: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Контент с отступом под навигацию */
+.communities-content {
+    padding: 0 16px 100px 16px;
+}
+
+/* ========== СТРАНИЦА ДЕТАЛЬНОГО ПРОСМОТРА СООБЩЕСТВА ========== */
+
+.community-detail-header {
+    position: relative;
+}
+
+.community-cover {
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    height: 160px;
+    border-radius: 0 0 30px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.community-cover-icon {
+    font-size: 80px;
+    color: white;
+    opacity: 0.8;
+}
+
+.community-avatar {
+    position: absolute;
+    top: 120px;
+    left: 20px;
+    width: 80px;
+    height: 80px;
+    background: white;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: 3px solid white;
+}
+
+.community-avatar i {
+    font-size: 48px;
+    color: #F41D91;
+}
+
+.community-detail-info {
+    padding: 60px 20px 20px 20px;
+    background: white;
+    border-radius: 30px 30px 0 0;
+    margin-top: -20px;
+}
+
+.community-detail-name {
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.community-detail-status {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4CAF50;
+    background: rgba(76, 175, 80, 0.1);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+}
+
+.community-stats {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #F41D91;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #999;
+    margin-top: 4px;
+}
+
+.community-detail-description {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+.join-button {
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    border: none;
+    padding: 16px;
+    border-radius: 40px;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    width: 100%;
+    cursor: pointer;
+    transition: transform 0.2s;
+    margin-bottom: 24px;
+}
+
+.join-button:active {
+    transform: scale(0.98);
+}
+
+.join-button.joined {
+    background: #e0e0e0;
+    color: #999;
+}
+
+.members-section {
+    margin-top: 8px;
+}
+
+.members-section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 16px;
+}
+
+.members-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.member-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.member-avatar {
+    font-size: 40px;
+    color: #F41D91;
+}
+
+.member-info {
+    flex: 1;
+}
+
+.member-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.member-role {
+    font-size: 12px;
+    color: #F41D91;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    color: #F41D91;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 12px 20px;
+    margin-bottom: 8px;
+}
+
+.back-button:active {
+    opacity: 0.7;
+}
+
+/* Карточка сообщества */
+.community-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    transition: all 0.2s;
+    border: 1px solid rgba(244, 29, 145, 0.1);
+    cursor: pointer;
+}
+
+.community-card:active {
+    transform: scale(0.99);
+}
+
+.community-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.community-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+}
+
+.community-status {
+    font-size: 12px;
+    font-weight: 600;
+    color: #4CAF50;
+    background: rgba(76, 175, 80, 0.1);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.community-description {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+/* Исправленный футер: дата слева, кнопка справа */
+.community-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.community-date {
+    font-size: 13px;
+    color: #999;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.community-date i {
+    font-size: 14px;
+    color: #F41D91;
+}
+
+.details-link {
+    color: #F41D91;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}

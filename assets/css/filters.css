@@ -1,0 +1,290 @@
+/* Стили для страницы фильтров */
+
+.filters-container {
+    max-width: 450px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #f5f9ff 0%, #eef3fc 100%);
+    min-height: 100vh;
+    position: relative;
+}
+
+.back-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(244, 29, 145, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.back-btn {
+    font-size: 24px;
+    cursor: pointer;
+    color: #F41D91;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+
+.back-btn:active {
+    transform: scale(0.9);
+}
+
+.back-header .gradient-title {
+    font-size: 20px;
+    margin: 0;
+    font-weight: 600;
+    flex: 1;
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.filters-content {
+    padding: 20px 16px;
+    padding-bottom: 100px;
+}
+
+/* Баннер чата */
+.chat-banner {
+    background: white;
+    border-radius: 20px;
+    padding: 16px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid rgba(244, 29, 145, 0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.chat-banner-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.chat-banner-info {
+    flex: 1;
+}
+
+.chat-banner-info h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.chat-banner-info p {
+    font-size: 12px;
+    color: #999;
+}
+
+/* Секция фильтров */
+.filter-section {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(244, 29, 145, 0.1);
+}
+
+.filter-section h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* Дата */
+.date-range {
+    display: flex;
+    gap: 16px;
+}
+
+.date-item {
+    flex: 1;
+}
+
+.date-label {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.date-value {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+    background: #f8f9fa;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    cursor: pointer;
+}
+
+.date-value:active {
+    background: #f0f0f0;
+}
+
+/* Стоимость */
+.price-range {
+    display: flex;
+    gap: 16px;
+}
+
+.price-item {
+    flex: 1;
+}
+
+.price-label {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.price-value {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+    background: #f8f9fa;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    cursor: pointer;
+}
+
+/* Категории */
+.categories-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.category-tag {
+    padding: 8px 16px;
+    background: #f8f9fa;
+    border-radius: 25px;
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid #e0e0e0;
+}
+
+.category-tag:active {
+    transform: scale(0.95);
+}
+
+.category-tag.selected {
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    color: white;
+    border: none;
+}
+
+/* Районы */
+.districts-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.district-tag {
+    padding: 8px 16px;
+    background: #f8f9fa;
+    border-radius: 25px;
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid #e0e0e0;
+}
+
+.district-tag:active {
+    transform: scale(0.95);
+}
+
+.district-tag.selected {
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    color: white;
+    border: none;
+}
+
+/* Кнопка начала выбора */
+.start-button {
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    border: none;
+    padding: 16px;
+    border-radius: 30px;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 24px;
+    margin-bottom: 40px;
+}
+
+.start-button:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+
+/* Нижняя навигация */
+.bottom-nav-icons {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 450px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 20px 28px;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+    border-top: 1px solid rgba(244, 29, 145, 0.1);
+    z-index: 100;
+}
+
+.nav-icon-item {
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 8px;
+    border-radius: 30px;
+}
+
+.nav-icon-item i {
+    font-size: 26px;
+    color: #999;
+    transition: all 0.2s;
+}
+
+.nav-icon-item.active i {
+    color: #F41D91;
+}
+
+.nav-icon-item:active {
+    transform: scale(0.9);
+}

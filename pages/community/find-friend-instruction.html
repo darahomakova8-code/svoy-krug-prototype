@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Как найти друга - СвойКруг</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../assets/css/styles.css">
+    <link rel="stylesheet" href="../../assets/css/find-friend-instruction.css">
+</head>
+<body>
+    <div class="instruction-container">
+        <!-- Шапка -->
+        <div class="instruction-header">
+            <div class="back-btn" onclick="goBack()">
+                <i class="bi bi-arrow-left"></i>
+            </div>
+            <h1>Найти друга</h1>
+            <div style="width: 32px;"></div>
+        </div>
+
+        <!-- Карта передвижений -->
+        <div class="journey-map">
+            <!-- Шаг 1 -->
+            <div class="journey-step">
+                <div class="step-marker">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <div class="step-content">
+                    <div class="step-title">Выберите сообщество</div>
+                    <div class="step-description">
+                        Перейдите в раздел «Сообщества» и выберите клуб по интересам, где хотите найти компанию
+                    </div>
+                    <div class="step-tags">
+                        <span class="step-tag"><i class="bi bi-people-fill"></i> Сообщества</span>
+                        <span class="step-tag"><i class="bi bi-film"></i> Киноклуб</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Шаг 2 -->
+            <div class="journey-step">
+                <div class="step-marker">
+                    <i class="bi bi-funnel"></i>
+                </div>
+                <div class="step-content">
+                    <div class="step-title">Настройте фильтры</div>
+                    <div class="step-description">
+                        В разделе «Активные предложения» нажмите на иконку фильтра и выберите подходящие параметры
+                    </div>
+                    <div class="step-tags">
+                        <span class="step-tag"><i class="bi bi-sliders2"></i> Фильтры</span>
+                        <span class="step-tag"><i class="bi bi-gender-ambiguous"></i> Пол</span>
+                        <span class="step-tag"><i class="bi bi-calendar"></i> Дата</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Шаг 3 -->
+            <div class="journey-step">
+                <div class="step-marker">
+                    <i class="bi bi-hand-thumbs-up"></i>
+                </div>
+                <div class="step-content">
+                    <div class="step-title">Нажмите «Мне интересно»</div>
+                    <div class="step-description">
+                        Выберите подходящее предложение и нажмите на кнопку «Мне интересно», чтобы откликнуться
+                    </div>
+                    <div class="step-tags">
+                        <span class="step-tag"><i class="bi bi-hand-thumbs-up"></i> Мне интересно</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Шаг 4 -->
+            <div class="journey-step">
+                <div class="step-marker">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <div class="step-content">
+                    <div class="step-title">Заполните анкету о себе</div>
+                    <div class="step-description">
+                        Расскажите о себе: возраст, интересы, почему хотите присоединиться к мероприятию
+                    </div>
+                    <div class="step-tags">
+                        <span class="step-tag"><i class="bi bi-pencil"></i> О себе</span>
+                        <span class="step-tag"><i class="bi bi-music-note"></i> Интересы</span>
+                        <span class="step-tag"><i class="bi bi-send"></i> Отправить</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Шаг 5 -->
+            <div class="journey-step">
+                <div class="step-marker">
+                    <i class="bi bi-clock-history"></i>
+                </div>
+                <div class="step-content">
+                    <div class="step-title">Отслеживайте статус заявки</div>
+                    <div class="step-description">
+                        В разделе «Мои события» (боковое меню) вы увидите статус вашей заявки
+                    </div>
+                    <div class="step-tags">
+                        <span class="step-tag status-waiting"><i class="bi bi-clock"></i> Ожидайте</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Шаг 6 -->
+            <div class="journey-step">
+                <div class="step-marker completed">
+                    <i class="bi bi-chat-dots"></i>
+                </div>
+                <div class="step-content">
+                    <div class="step-title">Общайтесь в чате</div>
+                    <div class="step-description">
+                        Когда организатор одобрит заявку, появится кнопка «Зайти в чат» — вы сможете общаться с компанией
+                    </div>
+                    <div class="step-tags">
+                        <span class="step-tag status-approved"><i class="bi bi-check-circle"></i> Заявка одобрена</span>
+                        <span class="step-tag"><i class="bi bi-chat-dots"></i> Зайти в чат</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Кнопка попробовать -->
+        <button class="try-button" onclick="tryItNow()">
+            Найти компанию →
+        </button>
+    </div>
+
+    <!-- Затемнение -->
+    <div class="floating-overlay" id="floatingOverlay"></div>
+
+    <!-- Всплывающая плашка -->
+    <div class="floating-card" id="floatingCard">
+        <button class="floating-card-close" onclick="closeFloatingCard()">
+            <i class="bi bi-x-lg"></i>
+        </button>
+        <div class="floating-card-header">
+            <i class="bi bi-person-heart"></i>
+            <h3>Найти друга</h3>
+        </div>
+        <p>Функция позволяет откликнуться на активные предложения в сообществах, заполнить анкету и после одобрения начать общаться в чате с компанией.</p>
+    </div>
+
+    <script src="../../assets/js/find-friend-instruction.js"></script>
+</body>
+</html>

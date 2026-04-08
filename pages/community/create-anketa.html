@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Найти компанию — СвойКруг</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../assets/css/styles.css">
+    <link rel="stylesheet" href="../../assets/css/create-anketa.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Шапка -->
+        <div class="create-header">
+            <div class="back-arrow" onclick="goBack()">
+                <i class="bi bi-arrow-left"></i>
+            </div>
+            <h1>Создать ивент</h1>
+        </div>
+
+        <div class="create-content">
+            <!-- Название сообщества (просто текст, без плашки) -->
+            <div class="community-name-title" id="communityName">Киноклуб</div>
+
+            <!-- Подзаголовок (выровнен влево) -->
+            <div class="subtitle-left">
+                Введите информацию о мероприятии, куда хотите собрать компанию
+            </div>
+
+            <!-- Блок 1: Название и описание -->
+            <div class="white-card">
+                <div class="form-group">
+                    <label class="form-label">Название мероприятия</label>
+                    <input type="text" class="form-input" id="eventTitle" placeholder="Например: Просмотр 'Аватар'">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Описание</label>
+                    <textarea class="form-input" id="description" placeholder="Расскажите, что планируете, куда пойдёте..."></textarea>
+                </div>
+            </div>
+
+            <!-- Блок 2: Дата -->
+            <div class="white-card">
+                <div class="double-row">
+                    <div class="form-group">
+                        <label class="form-label">Дата начала</label>
+                        <input type="date" class="form-input" id="dateStart">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Дата конца</label>
+                        <input type="date" class="form-input" id="dateEnd">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Блок 3: Количество человек -->
+            <div class="white-card">
+                <div class="form-group">
+                    <label class="form-label">Количество человек</label>
+                    <input type="number" class="form-input" id="peopleCount" placeholder="Сколько человек ищете?" value="2">
+                </div>
+            </div>
+
+            <!-- Блок 4: Возраст и пол -->
+            <div class="white-card">
+                <div class="double-row">
+                    <div class="form-group">
+                        <label class="form-label">Возраст от</label>
+                        <input type="number" class="form-input" id="ageMin" placeholder="Мин" value="18">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Возраст до</label>
+                        <input type="number" class="form-input" id="ageMax" placeholder="Макс" value="99">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Пол</label>
+                    <div class="gender-buttons">
+                        <div class="gender-option" onclick="selectGender(this, 'female')">Женский</div>
+                        <div class="gender-option" onclick="selectGender(this, 'male')">Мужской</div>
+                        <div class="gender-option active" onclick="selectGender(this, 'any')">Неважно</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Блок 5: Локация -->
+            <div class="white-card">
+                <div class="form-group">
+                    <label class="form-label">Локация</label>
+                    <input type="text" class="form-input" id="location" placeholder="Введите адрес или место встречи">
+                </div>
+            </div>
+
+            <!-- Блок 6: Пригласить друзей -->
+            <div class="white-card">
+                <div class="form-label">Пригласить друзей</div>
+                
+                <!-- Кнопка приглашения друга -->
+                <div class="invite-friend-row" onclick="openAddFriendsModal()">
+                    <div class="plus-icon">
+                        <i class="bi bi-plus-lg"></i>
+                    </div>
+                    <div class="invite-text">Пригласить друга</div>
+                </div>
+
+                <!-- Список приглашённых друзей -->
+                <div class="invited-friends-list" id="invitedFriendsList">
+                    <!-- Здесь будут появляться аватарки приглашённых друзей -->
+                </div>
+                
+                <!-- Счётчик приглашённых -->
+                <div class="friends-counter" id="friendsCounter" style="display: none;">
+                    <i class="bi bi-people-fill"></i>
+                    <span id="friendsCount">0</span> участников
+                </div>
+            </div>
+
+            <!-- Кнопка публикации -->
+            <button class="publish-btn" onclick="publishAnketa()">
+                Опубликовать
+            </button>
+        </div>
+
+        <!-- Нижняя навигация -->
+        <nav class="bottom-nav-icons">
+            <div class="nav-icon-item" onclick="alert('Меню')">
+                <i class="bi bi-list"></i>
+            </div>
+            <div class="nav-icon-item" onclick="window.location.href='../../index.html'">
+                <i class="bi bi-house-door-fill"></i>
+            </div>
+            <div class="nav-icon-item" onclick="alert('Билеты')">
+                <i class="bi bi-ticket-perforated-fill"></i>
+            </div>
+            <div class="nav-icon-item" onclick="alert('Избранное')">
+                <i class="bi bi-heart-fill"></i>
+            </div>
+            <div class="nav-icon-item" onclick="alert('Профиль')">
+                <i class="bi bi-person-fill"></i>
+            </div>
+        </nav>
+    </div>
+
+    <script src="../../assets/js/create-anketa.js"></script>
+</body>
+</html>

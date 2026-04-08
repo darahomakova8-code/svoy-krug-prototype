@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Создать чат - СвойКруг</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="../assets/css/create-chat.css">
+</head>
+<body>
+    <div class="create-chat-container">
+        <!-- Шапка с кнопкой назад -->
+        <div class="back-header">
+            <div class="back-btn" onclick="goBack()">
+                <i class="bi bi-arrow-left"></i>
+            </div>
+            <h1 class="gradient-title">Создать чат</h1>
+            <div style="width: 32px;"></div>
+        </div>
+        
+        <div class="create-form">
+            <!-- Введите название группы -->
+            <div class="form-group">
+                <h2>Введите название группы</h2>
+                <input type="text" class="group-name-input" id="groupName" placeholder="Планы на выходные" maxlength="30">
+            </div>
+            
+            <!-- Добавьте друзей -->
+            <div class="form-group">
+                <h2>Добавьте друзей</h2>
+                <div class="invite-card" onclick="openFriendsModal()">
+                    <div class="invite-content">
+                        <div class="invite-icon">
+                            <i class="bi bi-plus-lg"></i>
+                        </div>
+                        <span class="invite-text">Пригласи друзей</span>
+                    </div>
+                    <div id="invitedFriendsList" class="invited-friends-list"></div>
+                </div>
+            </div>
+            
+            <!-- Участники -->
+            <div class="form-group">
+                <h2>Участники</h2>
+                <div class="participants-list" id="participantsList">
+                    <div class="participant-item">
+                        <div class="participant-left">
+                            <div class="participant-avatar">И</div>
+                            <div class="participant-info">
+                                <div class="participant-name">Ирина</div>
+                                <div class="participant-role admin">администратор</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Кнопка Создать -->
+            <button class="create-button" onclick="createNewChat()">Создать</button>
+        </div>
+        
+        <!-- Нижняя навигация -->
+        <nav class="bottom-nav-icons">
+            <div class="nav-icon-item" onclick="openSideMenu()">
+                <i class="bi bi-list"></i>
+            </div>
+            <div class="nav-icon-item" onclick="navigateTo('../index.html')">
+                <i class="bi bi-house-door-fill"></i>
+            </div>
+            <div class="nav-icon-item" onclick="alert('Все мероприятия (в разработке)')">
+                <i class="bi bi-ticket-perforated-fill"></i>
+            </div>
+            <div class="nav-icon-item" onclick="alert('Избранное (в разработке)')">
+                <i class="bi bi-heart-fill"></i>
+            </div>
+            <div class="nav-icon-item" onclick="alert('Личный кабинет (в разработке)')">
+                <i class="bi bi-person-fill"></i>
+            </div>
+        </nav>
+    </div>
+    
+    <!-- Модальное окно для выбора друзей -->
+    <div class="friends-modal" id="friendsModal">
+        <div class="friends-modal-content">
+            <div class="friends-modal-header">
+                <h3>Выберите друзей</h3>
+                <div class="close-modal" onclick="closeFriendsModal()">
+                    <i class="bi bi-x-lg"></i>
+                </div>
+            </div>
+            <div class="friend-list" id="friendList"></div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="modalOverlay" onclick="closeFriendsModal()"></div>
+    
+    <script src="../assets/js/create-chat.js"></script>
+</body>
+</html>

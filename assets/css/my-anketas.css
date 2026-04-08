@@ -1,0 +1,528 @@
+/* ========== СТРАНИЦА "МОИ АНКЕТЫ" ========== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Шапка */
+.my-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: white;
+    border-bottom: 1px solid rgba(244, 29, 145, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.back-arrow {
+    font-size: 24px;
+    color: #F41D91;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.back-arrow:active {
+    transform: scale(0.9);
+}
+
+.my-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Основной контент */
+.my-content {
+    padding: 20px;
+    padding-bottom: 100px;
+}
+
+/* Вкладки */
+.tabs-container {
+    display: flex;
+    gap: 0;
+    background: white;
+    border-radius: 16px;
+    margin-bottom: 24px;
+    padding: 4px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    font-weight: 600;
+    color: #999;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: all 0.2s;
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(244, 29, 145, 0.3);
+}
+
+/* Карточка мероприятия */
+.event-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(244, 29, 145, 0.1);
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.event-card:active {
+    transform: scale(0.99);
+}
+
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.event-title {
+    font-size: 18px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.event-status {
+    font-size: 12px;
+    font-weight: 600;
+    color: #4CAF50;
+    background: rgba(76, 175, 80, 0.1);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+/* Участники */
+.participants-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.participants-avatars {
+    display: flex;
+    align-items: center;
+}
+
+.participant-avatar {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: -8px;
+    border: 2px solid white;
+}
+
+.participant-avatar:first-child {
+    margin-left: 0;
+}
+
+.participants-count {
+    font-size: 14px;
+    color: #666;
+    margin-left: 4px;
+}
+
+/* Футер: дата слева, кнопка справа */
+.event-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.event-date {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #999;
+}
+
+.event-date i {
+    color: #F41D91;
+    font-size: 14px;
+}
+
+.continue-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.continue-btn span {
+    font-size: 14px;
+    font-weight: 600;
+    color: #F41D91;
+}
+
+.continue-btn i {
+    font-size: 14px;
+    color: #F41D91;
+}
+
+.continue-btn:active {
+    opacity: 0.7;
+}
+
+/* Пустое состояние */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+}
+
+.empty-state i {
+    font-size: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.empty-state .small-text {
+    font-size: 13px;
+    color: #bbb;
+}
+
+/* Боковое меню */
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -300px;
+    width: 280px;
+    height: 100%;
+    background: white;
+    z-index: 1000;
+    transition: left 0.3s ease;
+    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+.side-menu.open {
+    left: 0;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+}
+
+.overlay.show {
+    display: block;
+}
+
+.side-menu-header {
+    padding: 20px;
+    border-bottom: 1px solid #f0f0f0;
+    background: linear-gradient(135deg, #f5f9ff 0%, #eef3fc 100%);
+}
+
+.close-menu {
+    text-align: right;
+    font-size: 24px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    color: #F41D91;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-avatar {
+    font-size: 48px;
+    color: #F41D91;
+}
+
+.user-name {
+    font-size: 18px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.side-menu-nav {
+    padding: 20px;
+}
+
+.side-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: all 0.2s;
+}
+
+.side-menu-item i {
+    font-size: 22px;
+    color: #F41D91;
+    width: 32px;
+}
+
+.side-menu-item span {
+    font-size: 16px;
+    color: #333;
+}
+
+.side-menu-item:active {
+    background: #eef3fc;
+    transform: translateX(4px);
+}
+
+.side-menu-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(244, 29, 145, 0.2), transparent);
+    margin: 16px 0;
+}
+
+.side-menu-section-title {
+    padding: 8px 0 4px 0;
+    margin-bottom: 4px;
+}
+
+.side-menu-section-title span {
+    font-size: 13px;
+    font-weight: 600;
+    color: #F41D91;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Нижняя навигация */
+.bottom-nav-icons {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 450px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 20px 28px;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+    border-top: 1px solid rgba(244, 29, 145, 0.1);
+}
+
+.nav-icon-item {
+    cursor: pointer;
+    padding: 8px;
+}
+
+.nav-icon-item i {
+    font-size: 26px;
+    color: #999;
+}
+
+.nav-icon-item.active i {
+    color: #F41D91;
+}
+
+/* Карточка запроса */
+.request-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(244, 29, 145, 0.1);
+}
+
+/* Кнопка "Ожидайте" (серая) */
+.pending-btn {
+    background: #e0e0e0;
+    color: #999;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+}
+
+/* Кнопка "Зайти в чат" (розовая) */
+.chat-btn {
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+}
+
+.pending-btn:active, .chat-btn:active {
+    transform: scale(0.95);
+}
+
+/* Общие стили для футера карточки */
+.event-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.event-date {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #999;
+}
+
+.event-date i {
+    color: #F41D91;
+    font-size: 14px;
+}
+
+/* Заголовок карточки запроса с кнопкой удаления */
+.request-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.request-header .event-title {
+    font-size: 18px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.delete-request-btn {
+    color: #ff4444;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+    transition: transform 0.2s;
+}
+
+.delete-request-btn:active {
+    transform: scale(0.9);
+}
+
+/* Карточка запроса */
+.request-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(244, 29, 145, 0.1);
+}
+
+/* Кнопка "Ожидайте" (серая) */
+.pending-btn {
+    background: #e0e0e0;
+    color: #999;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+}
+
+/* Кнопка "Зайти в чат" (розовая) */
+.chat-btn {
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+}
+
+.pending-btn:active, .chat-btn:active {
+    transform: scale(0.95);
+}
+
+/* Общие стили для футера карточки */
+.event-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.event-date {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #999;
+}
+
+.event-date i {
+    color: #F41D91;
+    font-size: 14px;
+}

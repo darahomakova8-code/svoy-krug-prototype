@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Сообщества — СвойКруг</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../assets/css/styles.css">
+    <link rel="stylesheet" href="../../assets/css/communities.css">
+    <style>
+        .communities-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(244, 29, 145, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-arrow {
+            font-size: 24px;
+            color: #F41D91;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .back-arrow:active {
+            transform: scale(0.9);
+        }
+        
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 0;
+        }
+        
+        .header-right {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        
+        .header-right i {
+            font-size: 22px;
+            color: #F41D91;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .header-right i:active {
+            transform: scale(0.9);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="communities-header-bar">
+            <div class="header-left">
+                <div class="back-arrow" onclick="goBackToMain()">
+                    <i class="bi bi-arrow-left"></i>
+                </div>
+                <h1 class="page-title">Сообщества</h1>
+            </div>
+            <div class="header-right">
+                <i class="bi bi-search" id="searchIcon" onclick="toggleSearch()"></i>
+                <i class="bi bi-sliders2" id="filterIcon" onclick="toggleFilterPanel()"></i>
+            </div>
+        </div>
+
+        <!-- Боковое меню с исправленными путями -->
+        <div class="side-menu" id="sideMenu">
+            <div class="side-menu-header">
+                <div class="close-menu" onclick="toggleSideMenu()">
+                    <i class="bi bi-x-lg"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="bi bi-person-circle"></i>
+                    </div>
+                    <div class="user-name">Гость</div>
+                </div>
+            </div>
+            <nav class="side-menu-nav">
+                <div class="side-menu-item" onclick="navigateTo('feed.html')">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Сообщества</span>
+                </div>
+                <div class="side-menu-item" onclick="alert('Друзья скоро!')">
+                    <i class="bi bi-person-heart"></i>
+                    <span>Друзья</span>
+                </div>
+                <div class="side-menu-item" onclick="window.location.href='my-anketas.html'">
+                    <i class="bi bi-file-text-fill"></i>
+                    <span>Мои события</span>
+                </div>
+                <div class="side-menu-divider"></div>
+                <div class="side-menu-section-title"><span>Выбираем вместе</span></div>
+                <div class="side-menu-item" onclick="window.location.href='../../pages/create-chat.html'">
+                    <i class="bi bi-plus-circle"></i>
+                    <span>Создать чат</span>
+                </div>
+                <div class="side-menu-item" onclick="window.location.href='../../pages/choose-together.html'">
+                    <i class="bi bi-chat-text"></i>
+                    <span>Мои чаты</span>
+                </div>
+                <div class="side-menu-divider"></div>
+                <div class="side-menu-item" onclick="alert('Челленджи скоро!')">
+                    <i class="bi bi-trophy-fill"></i>
+                    <span>Челленджи</span>
+                </div>
+                <div class="side-menu-item" onclick="alert('Колесо удачи скоро!')">
+                    <i class="bi bi-suit-club-fill"></i>
+                    <span>Колесо удачи</span>
+                </div>
+            </nav>
+        </div>
+        <div class="overlay" id="overlay" onclick="toggleSideMenu()"></div>
+
+        <div class="search-container" id="searchContainer" style="display: none; padding: 0 20px 12px 20px;">
+            <div class="search-box">
+                <i class="bi bi-search"></i>
+                <input type="text" id="searchInput" placeholder="Поиск по сообществам..." oninput="filterCommunities()">
+            </div>
+        </div>
+
+        <div class="filter-panel" id="filterPanel" style="margin: 0 20px 12px 20px;">
+            <div class="filter-section">
+                <div class="filter-section-title">Категории</div>
+                <div class="filter-tags" id="categoryFilters">
+                    <span class="filter-tag active" data-cat="all">Все</span>
+                    <span class="filter-tag" data-cat="team">Team</span>
+                    <span class="filter-tag" data-cat="cinema">Кино</span>
+                    <span class="filter-tag" data-cat="sport">Спорт</span>
+                    <span class="filter-tag" data-cat="books">Книги</span>
+                    <span class="filter-tag" data-cat="museums">Музеи</span>
+                    <span class="filter-tag" data-cat="dogs">Собаки</span>
+                </div>
+            </div>
+            <div class="filter-section">
+                <div class="filter-section-title">Сортировка</div>
+                <div class="filter-tags" id="sortFilters">
+                    <span class="filter-tag active" data-sort="default">По умолчанию</span>
+                    <span class="filter-tag" data-sort="members-asc">Участники ↑</span>
+                    <span class="filter-tag" data-sort="members-desc">Участники ↓</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="communities-content">
+            <div class="communities-subtitle">Вступай в клуб по интересам, знакомься и общайся</div>
+            <button class="create-community-btn" onclick="alert('Функция «Создать сообщество» в разработке')">
+                Создать сообщество
+            </button>
+            <div id="communitiesList"></div>
+        </div>
+
+        <!-- Нижнее меню -->
+        <nav class="bottom-nav-icons">
+            <div class="nav-icon-item" onclick="toggleSideMenu()">
+                <i class="bi bi-list"></i>
+            </div>
+            <div class="nav-icon-item" onclick="window.location.href='../../index.html'">
+                <i class="bi bi-house-door-fill"></i>
+            </div>
+            <div class="nav-icon-item" onclick="alert('Все мероприятия (в разработке)')">
+                <i class="bi bi-ticket-perforated-fill"></i>
+            </div>
+            <div class="nav-icon-item" onclick="alert('Избранное (в разработке)')">
+                <i class="bi bi-heart-fill"></i>
+            </div>
+            <div class="nav-icon-item" onclick="alert('Личный кабинет (в разработке)')">
+                <i class="bi bi-person-fill"></i>
+            </div>
+        </nav>
+    </div>
+
+    <script>
+        function goBackToMain() {
+            window.location.href = '../../index.html';
+        }
+
+        function toggleSideMenu() {
+            const sideMenu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('overlay');
+            sideMenu.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        function navigateTo(page) {
+            window.location.href = page;
+        }
+
+        function toggleSearch() {
+            const container = document.getElementById('searchContainer');
+            const input = document.getElementById('searchInput');
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                if (input) input.focus();
+            } else {
+                container.style.display = 'none';
+                if (input) {
+                    input.value = '';
+                    if (typeof filterCommunities === 'function') filterCommunities();
+                }
+            }
+        }
+
+        function toggleFilterPanel() {
+            const panel = document.getElementById('filterPanel');
+            panel.classList.toggle('show');
+        }
+
+        // Закрываем фильтр при клике вне
+        document.addEventListener('click', function(e) {
+            const panel = document.getElementById('filterPanel');
+            const filterIcon = document.getElementById('filterIcon');
+            if (panel && panel.classList.contains('show') && 
+                !panel.contains(e.target) && 
+                filterIcon && !filterIcon.contains(e.target)) {
+                panel.classList.remove('show');
+            }
+        });
+    </script>
+    <script src="../../assets/js/communities.js"></script>
+</body>
+</html>

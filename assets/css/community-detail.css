@@ -1,0 +1,441 @@
+/* ========== СТРАНИЦА ДЕТАЛЬНОГО ПРОСМОТРА СООБЩЕСТВА ========== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Шапка */
+.detail-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: white;
+    border-bottom: 1px solid rgba(244, 29, 145, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.back-arrow {
+    font-size: 24px;
+    color: #F41D91;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.back-arrow:active {
+    transform: scale(0.9);
+}
+
+.detail-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Фото сообщества (как было - серый фон) */
+.community-cover-section {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.community-cover {
+    background: linear-gradient(135deg, #d0d0d0 0%, #b0b0b0 100%);
+    height: 200px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.community-cover i {
+    font-size: 80px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Краткое описание с рейтингом (внизу фото, справа) */
+.community-badge {
+    position: absolute;
+    bottom: -20px;
+    right: 20px;
+    background: white;
+    border-radius: 20px;
+    padding: 12px 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.badge-item {
+    text-align: center;
+}
+
+.badge-label {
+    font-size: 11px;
+    color: #999;
+}
+
+.badge-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #F41D91;
+}
+
+/* Описание сообщества */
+.community-description-text {
+    padding: 30px 20px 0 20px;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+/* Две кнопки */
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    padding: 0 20px;
+    margin-bottom: 28px;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 40px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.action-btn:active {
+    transform: scale(0.98);
+}
+
+.chat-btn {
+    background: white;
+    border: 1.5px solid #F41D91;
+    color: #F41D91;
+}
+
+.find-partner-btn {
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    border: none;
+    color: white;
+}
+
+/* Заголовок с фильтром */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    margin-bottom: 16px;
+}
+
+.section-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+}
+
+.filter-icon {
+    font-size: 22px;
+    color: #F41D91;
+    cursor: pointer;
+}
+
+/* Панель фильтров анкет (исправлено: всё внутри) */
+.filter-panel {
+    margin: 0 16px 20px 16px;
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    display: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.filter-panel.show {
+    display: block;
+}
+
+.filter-row {
+    margin-bottom: 16px;
+}
+
+.filter-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.gender-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.gender-btn {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    text-align: center;
+    cursor: pointer;
+    background: white;
+    transition: all 0.2s;
+}
+
+.gender-btn.active {
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    color: white;
+    border: none;
+}
+
+/* Исправлено: диапазон возраста не выходит за рамки */
+.age-range {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.age-range input {
+    flex: 1;
+    min-width: 80px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    font-size: 14px;
+    outline: none;
+}
+
+.age-range span {
+    color: #999;
+}
+
+/* Исправлено: даты не выходят за рамки */
+.date-range {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.date-range input {
+    flex: 1;
+    min-width: 120px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    font-size: 14px;
+    outline: none;
+}
+
+.apply-filters-btn {
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    border: none;
+    padding: 12px;
+    border-radius: 30px;
+    color: white;
+    font-weight: 600;
+    width: 100%;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+/* Карточка анкеты */
+.anketa-card {
+    background: white;
+    border-radius: 24px;
+    margin: 0 16px 16px 16px;
+    padding: 20px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.anketa-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.author-avatar {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+}
+
+.author-info {
+    flex: 1;
+}
+
+.author-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.verified-badge {
+    color: #4CAF50;
+    font-size: 16px;
+}
+
+.author-age {
+    font-size: 14px;
+    color: #999;
+}
+
+.event-title {
+    font-size: 18px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 10px;
+}
+
+.event-description {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.event-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.detail-item i {
+    width: 20px;
+    color: #F41D91;
+}
+
+.event-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.responses-count {
+    font-size: 13px;
+    color: #999;
+}
+
+.interested-btn {
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    border: none;
+    padding: 10px 24px;
+    border-radius: 30px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.interested-btn:active {
+    transform: scale(0.95);
+}
+
+/* Пустое состояние */
+.empty-state {
+    text-align: center;
+    padding: 48px 20px;
+    color: #999;
+}
+
+.empty-state i {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+/* Нижняя навигация */
+.bottom-nav-icons {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 450px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 20px 28px;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+    border-top: 1px solid rgba(244, 29, 145, 0.1);
+}
+
+.nav-icon-item {
+    cursor: pointer;
+    padding: 8px;
+}
+
+.nav-icon-item i {
+    font-size: 26px;
+    color: #999;
+}
+
+.nav-icon-item.active i {
+    color: #F41D91;
+}
+
+.content-scroll {
+    padding-bottom: 80px;
+}
+
+/* Адаптация для маленьких экранов (только для фильтров) */
+@media (max-width: 450px) {
+    .age-range {
+        flex-direction: column;
+    }
+    
+    .age-range input {
+        width: 100%;
+    }
+    
+    .date-range {
+        flex-direction: column;
+    }
+    
+    .date-range input {
+        width: 100%;
+    }
+    
+    .gender-buttons {
+        flex-direction: row;
+    }
+}

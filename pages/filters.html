@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Фильтры - СвойКруг</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="../assets/css/filters.css">
+</head>
+<body>
+    <div class="filters-container">
+        <!-- Шапка -->
+        <div class="back-header">
+            <div class="back-btn" onclick="goBack()">
+                <i class="bi bi-arrow-left"></i>
+            </div>
+            <h1 class="gradient-title">Фильтры</h1>
+            <div style="width: 32px;"></div>
+        </div>
+        
+        <div class="filters-content">
+            <!-- Баннер с названием чата -->
+            <div class="chat-banner">
+                <div class="chat-banner-avatar">ПВ</div>
+                <div class="chat-banner-info">
+                    <h3>Планы на выходные</h3>
+                    <p>Выставили предпочтения по мероприятию</p>
+                </div>
+            </div>
+            
+            <!-- Дата -->
+            <div class="filter-section">
+                <h3>Дата</h3>
+                <div class="date-range">
+                    <div class="date-item">
+                        <span class="date-label">Начало:</span>
+                        <div class="date-value" id="startDate" onclick="selectDate('start')">15.03.2026</div>
+                    </div>
+                    <div class="date-item">
+                        <span class="date-label">Конец:</span>
+                        <div class="date-value" id="endDate" onclick="selectDate('end')">15.03.2026</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Стоимость -->
+            <div class="filter-section">
+                <h3>Стоимость на человека</h3>
+                <div class="price-range">
+                    <div class="price-item">
+                        <span class="price-label">Мин:</span>
+                        <div class="price-value" id="minPrice" onclick="selectPrice('min')">300</div>
+                    </div>
+                    <div class="price-item">
+                        <span class="price-label">Макс:</span>
+                        <div class="price-value" id="maxPrice" onclick="selectPrice('max')">2000</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Топ мероприятия (категории) -->
+            <div class="filter-section">
+                <h3>Топ мероприятия</h3>
+                <div class="categories-grid" id="categoriesContainer"></div>
+            </div>
+            
+            <!-- Районы -->
+            <div class="filter-section">
+                <h3>Районы</h3>
+                <div class="districts-grid" id="districtsContainer"></div>
+            </div>
+            
+            <!-- Кнопка начала выбора -->
+            <button class="start-button" onclick="startSelection()">Начать выбор</button>
+        </div>
+        
+        <!-- Нижняя навигация -->
+        <nav class="bottom-nav-icons">
+            <div class="nav-icon-item" onclick="navigateTo('../index.html')">
+                <i class="bi bi-house-door-fill"></i>
+            </div>
+            <div class="nav-icon-item active" onclick="navigateTo('filters.html')">
+                <i class="bi bi-search"></i>
+            </div>
+            <div class="nav-icon-item" onclick="navigateTo('chat.html')">
+                <i class="bi bi-chat-dots-fill"></i>
+            </div>
+            <div class="nav-icon-item" onclick="alert('Профиль (в разработке)')">
+                <i class="bi bi-person-fill"></i>
+            </div>
+        </nav>
+    </div>
+    
+    <script src="../assets/js/filters.js"></script>
+</body>
+</html>
