@@ -152,8 +152,7 @@ function publishAnketa() {
         gender: selectedGender,
         participants: participants,
         requests: [
-            { name: "Надя", initial: "Н" },
-            { name: "Коля", initial: "К" }
+            { name: "Надя", initial: "Н" }
         ],
         invitedFriends: selectedFriends.map(f => f.name),
         createdAt: new Date().toISOString()

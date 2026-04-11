@@ -1,8 +1,6 @@
-// Данные о мероприятии (обновлённые)
 let currentEvent = null;
 let selectedFriendsToAdd = [];
 
-// Список доступных друзей
 let availableFriends = [
     { id: 1, name: "Анна", initial: "А", status: "Онлайн" },
     { id: 2, name: "Михаил", initial: "М", status: "Онлайн" },
@@ -11,7 +9,6 @@ let availableFriends = [
     { id: 5, name: "Ольга", initial: "О", status: "Был(а) вчера" }
 ];
 
-// Загрузка данных мероприятия
 function loadEventData() {
     const eventId = localStorage.getItem('selectedEventId');
     if (!eventId) {
@@ -20,46 +17,43 @@ function loadEventData() {
         return;
     }
     
-    // Базовые данные
-    currentEvent = {
-        id: parseInt(eventId),
-        eventTitle: "Просмотр фильма Аватар",
-        description: "Предлагаю сходить в кино на 3-ю часть Аватара, после поделиться впечатлением в кафе",
-        date: "2026-03-10",
-        location: "Мираж",
-        availableSeats: 5,
-        invitedFriends: ["Анна", "Михаил"],
-        participants: [
-            { name: "Ирина", role: "Участник", initial: "И" },
-            { name: "Иван", role: "Админ", initial: "И" },
-            { name: "Анастасия", role: "Участник", initial: "А" }
-        ],
-        requests: [
-            { name: "Коля", initial: "К" }
-        ]
-    };
+    const savedEvents = JSON.parse(localStorage.getItem('userAnketas') || '[]');
+    const savedEvent = savedEvents.find(e => e.id == eventId);
     
-    // Загружаем принятых участников из localStorage
-    const acceptedParticipants = JSON.parse(localStorage.getItem('acceptedParticipants') || '[]');
-    if (acceptedParticipants.length > 0) {
-        acceptedParticipants.forEach(participant => {
-            const exists = currentEvent.participants.some(p => p.name === participant.name);
-            if (!exists) {
-                currentEvent.participants.push({
-                    name: participant.name,
-                    role: "Участник",
-                    initial: participant.initial
-                });
-                currentEvent.availableSeats++;
-            }
-        });
-        localStorage.removeItem('acceptedParticipants');
+    if (savedEvent) {
+        currentEvent = savedEvent;
+    } else {
+        currentEvent = {
+            id: parseInt(eventId),
+            eventTitle: "Просмотр фильма Аватар",
+            description: "Предлагаю сходить в кино на 3-ю часть Аватара, после поделиться впечатлением в кафе",
+            date: "2026-03-10",
+            location: "Мираж",
+            availableSeats: 6,
+            participants: [
+                { name: "Ирина", role: "Участник", initial: "И" },
+                { name: "Иван", role: "Админ", initial: "И" },
+                { name: "Надя", role: "Участник", initial: "Н" }
+            ],
+            requests: []
+        };
+        saveEventToLocalStorage();
     }
     
     renderEventPage();
 }
 
-// Рендер страницы
+function saveEventToLocalStorage() {
+    let events = JSON.parse(localStorage.getItem('userAnketas') || '[]');
+    const eventIndex = events.findIndex(e => e.id == currentEvent.id);
+    if (eventIndex !== -1) {
+        events[eventIndex] = currentEvent;
+    } else {
+        events.push(currentEvent);
+    }
+    localStorage.setItem('userAnketas', JSON.stringify(events));
+}
+
 function renderEventPage() {
     document.getElementById('eventTitle').textContent = currentEvent.eventTitle;
     document.getElementById('eventDescription').textContent = currentEvent.description;
@@ -71,18 +65,12 @@ function renderEventPage() {
     renderRequests();
 }
 
-// Рендер участников
 function renderParticipants() {
-    const participants = currentEvent.participants || [];
     const container = document.getElementById('participantsList');
+    const participants = currentEvent.participants || [];
     
     if (participants.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <i class="bi bi-person-plus"></i>
-                <p>Пока нет участников</p>
-            </div>
-        `;
+        container.innerHTML = '<div class="empty-state"><i class="bi bi-person-plus"></i><p>Пока нет участников</p></div>';
         return;
     }
     
@@ -96,161 +84,132 @@ function renderParticipants() {
                 </div>
             </div>
             <div class="member-right">
-                <div class="delete-member" onclick="deleteParticipant(${index})">
-                    <i class="bi bi-x-circle"></i>
-                </div>
+                <div class="delete-member" onclick="deleteParticipant(${index})"><i class="bi bi-x-circle"></i></div>
             </div>
         </div>
     `).join('');
 }
 
-// Рендер запросов
 function renderRequests() {
-    const requests = currentEvent.requests || [];
     const container = document.getElementById('requestsList');
-    
-    if (requests.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <i class="bi bi-chat-dots"></i>
-                <p>Нет активных запросов</p>
-            </div>
-        `;
-        return;
-    }
-    
-    container.innerHTML = requests.map(r => `
-        <div class="request-item">
-            <div class="request-left">
-                <div class="request-avatar-gray">${r.initial}</div>
-                <div class="request-name">${escapeHtml(r.name)}</div>
-            </div>
-            <div class="request-details" onclick="viewRequest('${r.name}')">
-                Подробнее <i class="bi bi-arrow-right"></i>
-            </div>
-        </div>
-    `).join('');
+    container.innerHTML = '<div class="empty-state"><i class="bi bi-chat-dots"></i><p>Нет активных запросов</p></div>';
 }
 
-// Удаление участника
 function deleteParticipant(index) {
     if (confirm('Удалить участника?')) {
         currentEvent.participants.splice(index, 1);
-        renderParticipants();
+        currentEvent.availableSeats--;
         saveEventToLocalStorage();
+        renderParticipants();
     }
 }
 
-function saveEventToLocalStorage() {
-    const savedAnketas = localStorage.getItem('userAnketas');
-    if (savedAnketas) {
-        let events = JSON.parse(savedAnketas);
-        const eventIndex = events.findIndex(e => e.id === currentEvent.id);
-        if (eventIndex !== -1) {
-            events[eventIndex] = currentEvent;
-            localStorage.setItem('userAnketas', JSON.stringify(events));
-        }
-    }
-}
-
-function openAddFriendsModal() {
-    selectedFriendsToAdd = [];
-    const modal = document.getElementById('friendsModal');
-    renderFriendsModalList();
-    modal.classList.add('show');
-}
-
-function closeFriendsModal() {
-    const modal = document.getElementById('friendsModal');
-    modal.classList.remove('show');
-}
-
-function renderFriendsModalList() {
-    const container = document.getElementById('friendsModalList');
-    if (!container) return;
-    
-    container.innerHTML = availableFriends.map(friend => `
-        <div class="friend-item ${selectedFriendsToAdd.some(f => f.id === friend.id) ? 'selected' : ''}" onclick="toggleFriendSelection(${friend.id})">
-            <div class="friend-avatar-gray">${friend.initial}</div>
-            <div class="friend-info">
-                <div class="friend-name">${escapeHtml(friend.name)}</div>
-                <div class="friend-status">${friend.status}</div>
-            </div>
-            <div class="friend-check">
-                ${selectedFriendsToAdd.some(f => f.id === friend.id) ? '<i class="bi bi-check-lg"></i>' : ''}
-            </div>
-        </div>
-    `).join('');
-}
-
-function toggleFriendSelection(friendId) {
-    const friend = availableFriends.find(f => f.id === friendId);
-    const index = selectedFriendsToAdd.findIndex(f => f.id === friendId);
-    
-    if (index === -1) {
-        selectedFriendsToAdd.push(friend);
-    } else {
-        selectedFriendsToAdd.splice(index, 1);
-    }
-    
-    renderFriendsModalList();
-}
-
-function confirmAddFriends() {
-    if (selectedFriendsToAdd.length === 0) {
-        alert('Выберите хотя бы одного друга');
+function addFriendToEvent(friend) {
+    const exists = currentEvent.participants.some(p => p.name === friend.name);
+    if (exists) {
+        alert(`${friend.name} уже является участником`);
         return;
     }
     
-    selectedFriendsToAdd.forEach(friend => {
-        currentEvent.participants.push({
-            name: friend.name,
-            role: "Участник",
-            initial: friend.initial
-        });
-        currentEvent.availableSeats++;
+    currentEvent.participants.push({
+        name: friend.name,
+        role: "Участник",
+        initial: friend.initial
     });
-    
+    currentEvent.availableSeats++;
     saveEventToLocalStorage();
     renderParticipants();
-    closeFriendsModal();
-    alert(`Добавлено ${selectedFriendsToAdd.length} участников`);
 }
 
-function openChat() {
-    alert('Чат мероприятия (будет реализован позже)');
-}
-
-function viewRequest(requestName) {
-    alert(`Просмотр запроса от ${requestName} (будет реализовано позже)`);
-}
-
-function formatDate(dateStr) {
-    if (!dateStr) return 'Дата не указана';
-    const parts = dateStr.split('-');
-    return `${parts[2]}.${parts[1]}.${parts[0]}`;
-}
-
-function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
+function openAddFriendsModal() {
+    const availableToAdd = availableFriends.filter(f => 
+        !currentEvent.participants.some(p => p.name === f.name)
+    );
+    
+    if (availableToAdd.length === 0) {
+        alert('Все друзья уже добавлены в мероприятие');
+        return;
+    }
+    
+    let selectedIds = [];
+    
+    const modalHtml = `
+        <div class="friends-modal-overlay" id="friendModalOverlay">
+            <div class="friends-modal-content">
+                <div class="friends-modal-header">
+                    <h3>Выберите друзей</h3>
+                    <i class="bi bi-x-lg" onclick="closeFriendModal()"></i>
+                </div>
+                <div class="friends-modal-list" id="friendModalList">
+                    ${availableToAdd.map(f => `
+                        <div class="friend-item" data-id="${f.id}">
+                            <div class="friend-avatar-gray">${f.initial}</div>
+                            <div class="friend-info">
+                                <div class="friend-name">${f.name}</div>
+                                <div class="friend-status">${f.status}</div>
+                            </div>
+                            <div class="friend-check"></div>
+                        </div>
+                    `).join('')}
+                </div>
+                <button class="modal-confirm-btn" onclick="confirmAddFriendsFromModal()">Добавить выбранных</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    
+    window.selectedFriendsData = availableToAdd;
+    window.selectedFriendsIds = selectedIds;
+    
+    document.querySelectorAll('.friend-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const id = parseInt(this.dataset.id);
+            if (window.selectedFriendsIds.includes(id)) {
+                window.selectedFriendsIds = window.selectedFriendsIds.filter(i => i !== id);
+                this.classList.remove('selected');
+                this.querySelector('.friend-check').innerHTML = '';
+            } else {
+                window.selectedFriendsIds.push(id);
+                this.classList.add('selected');
+                this.querySelector('.friend-check').innerHTML = '<i class="bi bi-check-lg"></i>';
+            }
+        });
     });
 }
 
-function goBack() {
-    window.location.href = 'my-anketas.html';
+window.confirmAddFriendsFromModal = function() {
+    const selected = window.selectedFriendsData.filter(f => window.selectedFriendsIds.includes(f.id));
+    if (selected.length === 0) {
+        alert('Выберите хотя бы одного друга');
+        return;
+    }
+    selected.forEach(f => addFriendToEvent(f));
+    closeFriendModal();
+    alert(`Добавлено ${selected.length} участников`);
+};
+
+function closeFriendModal() {
+    const modal = document.getElementById('friendModalOverlay');
+    if (modal) modal.remove();
 }
 
-function initEventDetailPage() {
-    loadEventData();
+function deleteEvent() {
+    if (confirm('Удалить мероприятие?')) {
+        let events = JSON.parse(localStorage.getItem('userAnketas') || '[]');
+        events = events.filter(e => e.id != currentEvent.id);
+        localStorage.setItem('userAnketas', JSON.stringify(events));
+        alert('Мероприятие удалено');
+        window.location.href = 'my-anketas.html';
+    }
 }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initEventDetailPage);
-} else {
-    initEventDetailPage();
-}
+function openChat() { alert('Чат мероприятия'); }
+function formatDate(dateStr) { return dateStr.split('-').reverse().join('.'); }
+function escapeHtml(str) { return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'); }
+function goBack() { window.location.href = 'my-anketas.html'; }
+function toggleSideMenu() { document.getElementById('sideMenu')?.classList.toggle('open'); document.getElementById('overlay')?.classList.toggle('show'); }
+function navigateTo(page) { window.location.href = page; }
+
+document.addEventListener('DOMContentLoaded', loadEventData);

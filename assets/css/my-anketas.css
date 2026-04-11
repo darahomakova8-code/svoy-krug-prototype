@@ -190,12 +190,12 @@
 .continue-btn span {
     font-size: 14px;
     font-weight: 600;
-    color: #F41D91;
+    color: #4CAF50;
 }
 
 .continue-btn i {
     font-size: 14px;
-    color: #F41D91;
+    color: #4CAF50;
 }
 
 .continue-btn:active {
@@ -525,4 +525,25 @@
 .event-date i {
     color: #F41D91;
     font-size: 14px;
+}
+
+/* Кнопка удаления мероприятия */
+.delete-event-btn {
+    color: #ff4444;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+    transition: transform 0.2s;
+}
+
+.delete-event-btn:active {
+    transform: scale(0.9);
+}
+
+/* Заголовок карточки с кнопкой удаления */
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
 }

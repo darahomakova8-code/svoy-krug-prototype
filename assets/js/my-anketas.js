@@ -57,16 +57,21 @@ function renderEvents() {
         return;
     }
     
-    container.innerHTML = myEvents.map(event => {
+    // Сортируем мероприятия по id (новые сверху, так как id = Date.now())
+    const sortedEvents = [...myEvents].sort((a, b) => b.id - a.id);
+    
+    container.innerHTML = sortedEvents.map(event => {
         const invitedFriends = event.invitedFriends || [];
         const avatarsHtml = invitedFriends.slice(0, 3).map(f => `<div class="participant-avatar">${f.charAt(0)}</div>`).join('');
         const moreHtml = invitedFriends.length > 3 ? `<div class="participant-avatar">+${invitedFriends.length - 3}</div>` : '';
         
         return `
-            <div class="event-card" onclick="continueEvent(${event.id})">
+            <div class="event-card" data-event-id="${event.id}">
                 <div class="event-header">
                     <div class="event-title">${escapeHtml(event.eventTitle)}</div>
-                    <div class="event-status">● Active</div>
+                    <div class="delete-event-btn" onclick="event.stopPropagation(); deleteEvent(${event.id})">
+                        <i class="bi bi-trash3"></i>
+                    </div>
                 </div>
                 <div class="participants-row">
                     <div class="participants-avatars">${avatarsHtml}${moreHtml}</div>
@@ -74,11 +79,34 @@ function renderEvents() {
                 </div>
                 <div class="event-footer">
                     <div class="event-date"><i class="bi bi-calendar"></i><span>${formatDate(event.date)}</span></div>
-                    <div class="continue-btn"><span>Продолжить</span><i class="bi bi-arrow-right"></i></div>
+                    <div class="continue-btn" onclick="continueEvent(${event.id})"><span>Продолжить</span><i class="bi bi-arrow-right"></i></div>
                 </div>
             </div>
         `;
     }).join('');
+}
+
+// Удаление мероприятия
+function deleteEvent(eventId) {
+    if (confirm('Вы уверены, что хотите удалить это мероприятие?')) {
+        // Удаляем из массива
+        myEvents = myEvents.filter(e => e.id !== eventId);
+        localStorage.setItem('userAnketas', JSON.stringify(myEvents));
+        
+        // Также удаляем связанные заявки на это мероприятие
+        let applications = JSON.parse(localStorage.getItem('myApplications') || '[]');
+        applications = applications.filter(a => a.eventId !== eventId);
+        localStorage.setItem('myApplications', JSON.stringify(applications));
+        
+        // Удаляем из appliedEvents
+        let appliedEvents = JSON.parse(localStorage.getItem('appliedEvents') || '[]');
+        appliedEvents = appliedEvents.filter(id => id !== eventId);
+        localStorage.setItem('appliedEvents', JSON.stringify(appliedEvents));
+        
+        // Обновляем отображение
+        renderEvents();
+        alert('Мероприятие удалено');
+    }
 }
 
 function renderRequests() {
@@ -142,20 +170,11 @@ function deleteRequest(appId) {
             let appliedEvents = JSON.parse(localStorage.getItem('appliedEvents') || '[]');
             appliedEvents = appliedEvents.filter(id => id != eventId);
             localStorage.setItem('appliedEvents', JSON.stringify(appliedEvents));
-            console.log('🗑️ Удалён eventId из appliedEvents:', eventId);
-            console.log('📋 Теперь appliedEvents:', appliedEvents);
         }
         
         // Обновляем отображение
         renderRequests();
         alert('Заявка удалена. Вы можете подать новую заявку.');
-        
-        // Если мы на странице мероприятия, обновим её
-        if (window.location.pathname.includes('event-view.html')) {
-            setTimeout(() => {
-                location.reload();
-            }, 500);
-        }
     }
 }
 

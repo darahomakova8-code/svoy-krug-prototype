@@ -1,7 +1,15 @@
 // Данные о мероприятии
 let currentEvent = null;
+let selectedFriendsToAdd = [];
 
-// Загрузка данных мероприятия
+let availableFriends = [
+    { id: 1, name: "Анна", initial: "А", status: "Онлайн" },
+    { id: 2, name: "Михаил", initial: "М", status: "Онлайн" },
+    { id: 3, name: "Екатерина", initial: "Е", status: "Был(а) недавно" },
+    { id: 4, name: "Дмитрий", initial: "Д", status: "Онлайн" },
+    { id: 5, name: "Ольга", initial: "О", status: "Был(а) вчера" }
+];
+
 function loadEventData() {
     const eventId = localStorage.getItem('selectedEventId');
     if (!eventId) {
@@ -10,13 +18,12 @@ function loadEventData() {
         return;
     }
     
-    const savedAnketas = localStorage.getItem('userAnketas');
-    if (savedAnketas) {
-        const events = JSON.parse(savedAnketas);
-        currentEvent = events.find(e => e.id == eventId);
-    }
+    const savedEvents = JSON.parse(localStorage.getItem('userAnketas') || '[]');
+    const savedEvent = savedEvents.find(e => e.id == eventId);
     
-    if (!currentEvent) {
+    if (savedEvent) {
+        currentEvent = savedEvent;
+    } else {
         currentEvent = {
             id: parseInt(eventId),
             eventTitle: "Просмотр фильма Аватар",
@@ -29,8 +36,7 @@ function loadEventData() {
                 { name: "Иван", role: "Админ", initial: "И" }
             ],
             requests: [
-                { name: "Надя", initial: "Н" },
-                { name: "Коля", initial: "К" }
+                { name: "Надя", initial: "Н" }
             ]
         };
         saveEventToLocalStorage();
@@ -39,7 +45,6 @@ function loadEventData() {
     renderEventPage();
 }
 
-// Сохранение в localStorage
 function saveEventToLocalStorage() {
     let events = JSON.parse(localStorage.getItem('userAnketas') || '[]');
     const eventIndex = events.findIndex(e => e.id == currentEvent.id);
@@ -51,7 +56,6 @@ function saveEventToLocalStorage() {
     localStorage.setItem('userAnketas', JSON.stringify(events));
 }
 
-// Рендер страницы
 function renderEventPage() {
     document.getElementById('eventTitle').textContent = currentEvent.eventTitle;
     document.getElementById('eventDescription').textContent = currentEvent.description;
@@ -63,7 +67,6 @@ function renderEventPage() {
     renderRequests();
 }
 
-// Рендер участников
 function renderParticipants() {
     const container = document.getElementById('participantsList');
     const participants = currentEvent.participants || [];
@@ -89,7 +92,6 @@ function renderParticipants() {
     `).join('');
 }
 
-// Рендер запросов
 function renderRequests() {
     const container = document.getElementById('requestsList');
     const requests = currentEvent.requests || [];
@@ -110,17 +112,22 @@ function renderRequests() {
     `).join('');
 }
 
-// Удаление участника
 function deleteParticipant(index) {
     if (confirm('Удалить участника?')) {
         currentEvent.participants.splice(index, 1);
+        currentEvent.availableSeats--;
         saveEventToLocalStorage();
         renderParticipants();
     }
 }
 
-// Добавление друга в мероприятие
 function addFriendToEvent(friend) {
+    const exists = currentEvent.participants.some(p => p.name === friend.name);
+    if (exists) {
+        alert(`${friend.name} уже является участником`);
+        return;
+    }
+    
     currentEvent.participants.push({
         name: friend.name,
         role: "Участник",
@@ -131,15 +138,15 @@ function addFriendToEvent(friend) {
     renderParticipants();
 }
 
-// Открытие модального окна добавления друзей
 function openAddFriendsModal() {
-    const friends = [
-        { id: 1, name: "Анна", initial: "А", status: "Онлайн" },
-        { id: 2, name: "Михаил", initial: "М", status: "Онлайн" },
-        { id: 3, name: "Екатерина", initial: "Е", status: "Был(а) недавно" },
-        { id: 4, name: "Дмитрий", initial: "Д", status: "Онлайн" },
-        { id: 5, name: "Ольга", initial: "О", status: "Был(а) вчера" }
-    ];
+    const availableToAdd = availableFriends.filter(f => 
+        !currentEvent.participants.some(p => p.name === f.name)
+    );
+    
+    if (availableToAdd.length === 0) {
+        alert('Все друзья уже добавлены в мероприятие');
+        return;
+    }
     
     let selectedIds = [];
     
@@ -151,7 +158,7 @@ function openAddFriendsModal() {
                     <i class="bi bi-x-lg" onclick="closeFriendModal()"></i>
                 </div>
                 <div class="friends-modal-list" id="friendModalList">
-                    ${friends.map(f => `
+                    ${availableToAdd.map(f => `
                         <div class="friend-item" data-id="${f.id}">
                             <div class="friend-avatar-gray">${f.initial}</div>
                             <div class="friend-info">
@@ -169,7 +176,7 @@ function openAddFriendsModal() {
     
     document.body.insertAdjacentHTML('beforeend', modalHtml);
     
-    window.selectedFriendsData = friends;
+    window.selectedFriendsData = availableToAdd;
     window.selectedFriendsIds = selectedIds;
     
     document.querySelectorAll('.friend-item').forEach(item => {
@@ -189,7 +196,6 @@ function openAddFriendsModal() {
     });
 }
 
-// Подтверждение добавления друзей
 window.confirmAddFriendsFromModal = function() {
     const selected = window.selectedFriendsData.filter(f => window.selectedFriendsIds.includes(f.id));
     if (selected.length === 0) {
@@ -198,24 +204,21 @@ window.confirmAddFriendsFromModal = function() {
     }
     selected.forEach(f => addFriendToEvent(f));
     closeFriendModal();
-    alert(`✅ Добавлено ${selected.length} участников`);
+    alert(`Добавлено ${selected.length} участников`);
 };
 
-// Закрытие модального окна
 function closeFriendModal() {
     const modal = document.getElementById('friendModalOverlay');
     if (modal) modal.remove();
 }
 
-// Просмотр запроса
 function viewRequest(requestName) {
     localStorage.setItem('selectedProfileName', requestName);
     window.location.href = 'profile-view.html';
 }
 
-// Удаление мероприятия
 function deleteEvent() {
-    if (confirm('Вы уверены, что хотите удалить это мероприятие?')) {
+    if (confirm('Удалить мероприятие?')) {
         let events = JSON.parse(localStorage.getItem('userAnketas') || '[]');
         events = events.filter(e => e.id != currentEvent.id);
         localStorage.setItem('userAnketas', JSON.stringify(events));
@@ -224,51 +227,11 @@ function deleteEvent() {
     }
 }
 
-// Чат (заглушка)
-function openChat() {
-    alert('💬 Чат мероприятия (будет реализован позже)');
-}
+function openChat() { alert('Чат мероприятия'); }
+function formatDate(dateStr) { return dateStr.split('-').reverse().join('.'); }
+function escapeHtml(str) { return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'); }
+function goBack() { window.location.href = 'my-anketas.html'; }
+function toggleSideMenu() { document.getElementById('sideMenu')?.classList.toggle('open'); document.getElementById('overlay')?.classList.toggle('show'); }
+function navigateTo(page) { window.location.href = page; }
 
-// Форматирование даты
-function formatDate(dateStr) {
-    if (!dateStr) return 'Дата не указана';
-    const parts = dateStr.split('-');
-    return `${parts[2]}.${parts[1]}.${parts[0]}`;
-}
-
-// Экранирование HTML
-function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
-    });
-}
-
-// Возврат на страницу моих анкет
-function goBack() {
-    window.location.href = 'my-anketas.html';
-}
-
-// Боковое меню
-function toggleSideMenu() {
-    const sideMenu = document.getElementById('sideMenu');
-    const overlay = document.getElementById('overlay');
-    if (sideMenu && overlay) {
-        sideMenu.classList.toggle('open');
-        overlay.classList.toggle('show');
-    }
-}
-
-function navigateTo(page) {
-    window.location.href = page;
-}
-
-// Инициализация
-function initEventDetailPage() {
-    loadEventData();
-}
-
-document.addEventListener('DOMContentLoaded', initEventDetailPage);
+document.addEventListener('DOMContentLoaded', loadEventData);

@@ -11,9 +11,9 @@ function loadChats() {
         chats = [
             {
                 id: 1,
-                name: "Планы на выходные",
+                name: "Пасха",
                 participants: 3,
-                avatar: "ПВ",
+                avatar: "ПC",
                 createdAt: "2026-03-28"
             },
             {

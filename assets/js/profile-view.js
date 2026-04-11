@@ -2,23 +2,22 @@ let currentProfile = null;
 
 function loadProfileData() {
     const profileName = localStorage.getItem('selectedProfileName');
-    if (!profileName) { alert('Анкета не найдена'); window.location.href = 'event-detail.html'; return; }
-    
-    if (profileName === "Надя") {
-        currentProfile = {
-            name: "Надя Кластеровна", age: 30, verified: true, initial: "Н",
-            description: "Люблю кино, увлекаюсь просмотром анимации, любимый герой Годко Сатору",
-            hobbies: ["Беговые лыжи", "Вязание", "Учеба"],
-            likedEvents: ["Концерт \"Егор криг\"", "Киновечер \"Советское кино\"", "Мастер класс по боксу"]
-        };
-    } else {
-        currentProfile = {
-            name: "Коля Николаев", age: 28, verified: false, initial: "К",
-            description: "Люблю активный отдых, кино и путешествия",
-            hobbies: ["Футбол", "Кино", "Путешествия"],
-            likedEvents: ["Футбольный матч", "Киновечер \"Новинки\"", "Поход в горы"]
-        };
+    if (!profileName) { 
+        alert('Анкета не найдена'); 
+        window.location.href = 'event-detail.html'; 
+        return; 
     }
+    
+    currentProfile = {
+        name: "Надя Кластеровна", 
+        age: 30, 
+        verified: true, 
+        initial: "Н",
+        description: "Люблю кино, увлекаюсь просмотром анимации, любимый герой Годко Сатору",
+        hobbies: ["Беговые лыжи", "Вязание", "Учеба"],
+        likedEvents: ["Концерт \"Егор криг\"", "Киновечер \"Советское кино\"", "Мастер класс по боксу"]
+    };
+    
     renderProfilePage();
 }
 
@@ -31,29 +30,33 @@ function renderProfilePage() {
     document.getElementById('likedEventsList').innerHTML = currentProfile.likedEvents.map(e => `<div class="liked-event-item">${escapeHtml(e)}</div>`).join('');
 }
 
-// Принять заявку
 function acceptRequest() {
     const eventId = localStorage.getItem('selectedEventId');
     let events = JSON.parse(localStorage.getItem('userAnketas') || '[]');
     const eventIndex = events.findIndex(e => e.id == eventId);
     
     if (eventIndex !== -1) {
+        // Добавляем Надю в участники
         if (!events[eventIndex].participants) events[eventIndex].participants = [];
         events[eventIndex].participants.push({
             name: currentProfile.name,
             role: "Участник",
             initial: currentProfile.initial
         });
-        events[eventIndex].requests = events[eventIndex].requests.filter(r => r.name !== currentProfile.name);
+        // Удаляем Надю из запросов
+        events[eventIndex].requests = [];
         events[eventIndex].availableSeats++;
+        
         localStorage.setItem('userAnketas', JSON.stringify(events));
         alert(`${currentProfile.name} добавлен(а) в участники!`);
     }
-    window.location.href = 'event-detail.html';
+    
+    window.location.href = 'event-detail-updated.html';
 }
 
 function goBack() { window.location.href = 'event-detail.html'; }
-function escapeHtml(str) { return str ? str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;') : ''; }
+function escapeHtml(str) { return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'); }
 function toggleSideMenu() { document.getElementById('sideMenu')?.classList.toggle('open'); document.getElementById('overlay')?.classList.toggle('show'); }
+function navigateTo(page) { window.location.href = page; }
 
 document.addEventListener('DOMContentLoaded', loadProfileData);
