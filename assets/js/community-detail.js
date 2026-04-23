@@ -261,16 +261,29 @@ function applyAnketaFilters() {
 
 // Отметка "Мне интересно" — переход на страницу заполнения анкеты
 function markInterested(anketaId) {
-    const anketa = anketasData.find(a => a.id === anketaId);
-    if (anketa) {
-        // Сохраняем ID мероприятия, на которое откликается пользователь
-        localStorage.setItem('applyEventId', anketaId);
-        localStorage.setItem('applyEventTitle', anketa.eventTitle);
-        localStorage.setItem('applyEventOrganizer', anketa.name);
-        
-        // Переход на страницу заполнения анкеты
-        window.location.href = 'apply-form.html';
+    // Сохраняем ID мероприятия
+    localStorage.setItem('applyEventId', anketaId);
+    
+    // Ищем анкету в данных
+    let anketa = anketasData.find(a => a.id === anketaId);
+    
+    // Если не нашли — ищем в localStorage
+    if (!anketa) {
+        const savedAnketas = JSON.parse(localStorage.getItem('userAnketas') || '[]');
+        anketa = savedAnketas.find(a => a.id === anketaId);
     }
+    
+    // Сохраняем данные мероприятия
+    if (anketa) {
+        localStorage.setItem('applyEventTitle', anketa.eventTitle || 'Мероприятие');
+        localStorage.setItem('applyEventOrganizer', anketa.name || 'Организатор');
+    } else {
+        localStorage.setItem('applyEventTitle', 'Мероприятие');
+        localStorage.setItem('applyEventOrganizer', 'Организатор');
+    }
+    
+    // Всегда переходим на страницу заполнения анкеты
+    window.location.href = 'apply-form.html';
 }
 
 // Инициализация страницы
