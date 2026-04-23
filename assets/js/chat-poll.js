@@ -89,7 +89,6 @@ function loadVotingResults() {
         pollVotes.hasCurrentUserVoted = true;
     } else if (savedStatus === 'results') {
         pollStatus = 'results';
-        // Когда статус "results", все участники проголосовали
         pollVotes.voters = ['Ирина', 'Анастасия', 'Иван'];
         pollVotes.hasCurrentUserVoted = true;
     } else {
@@ -104,12 +103,10 @@ function loadVotingResults() {
         pollVotes.voters = JSON.parse(savedVoters);
     }
     
-    // Если статус "results", убеждаемся что счетчик показывает 3/3
     if (pollStatus === 'results') {
         pollVotes.voters = ['Ирина', 'Анастасия', 'Иван'];
     }
     
-    // Если статус "voted", запускаем таймер для переключения на "results"
     if (pollStatus === 'voted' && !resultsTimeout) {
         resultsTimeout = setTimeout(() => {
             const chatId = JSON.parse(localStorage.getItem('currentChat') || '{}').id || 1;
@@ -118,7 +115,7 @@ function loadVotingResults() {
             pollVotes.voters = ['Ирина', 'Анастасия', 'Иван'];
             renderMessages();
             resultsTimeout = null;
-        }, 3000);
+        }, 2000);
     }
 }
 
@@ -206,8 +203,13 @@ function renderMessages() {
     html += `
         <div class="poll-card">
             <div class="poll-content">
-                <div class="poll-title">
-                    Ирина создала анкету для выбора мероприятия
+                <div class="poll-header-row">
+                    <div class="poll-title">
+                        Ирина создала анкету для выбора мероприятия
+                    </div>
+                    <div class="poll-share-icon" id="pollShareIcon">
+                        <i class="bi bi-share-fill"></i>
+                    </div>
                 </div>
                 ${buttonHtml}
                 <div class="poll-stats">
@@ -219,11 +221,48 @@ function renderMessages() {
     
     container.innerHTML = html;
     
+    // Добавляем обработчики для иконки «поделиться»
+    setTimeout(() => {
+        const shareIcon = document.getElementById('pollShareIcon');
+        if (shareIcon) {
+            shareIcon.addEventListener('click', copyPollLink);
+            
+            let pressTimer;
+            shareIcon.addEventListener('touchstart', (e) => {
+                pressTimer = setTimeout(() => {
+                    copyPollLink();
+                }, 500);
+            });
+            shareIcon.addEventListener('touchend', () => {
+                clearTimeout(pressTimer);
+            });
+            shareIcon.addEventListener('touchmove', () => {
+                clearTimeout(pressTimer);
+            });
+        }
+    }, 100);
+    
     const messagesArea = document.getElementById('messagesArea');
     if (messagesArea) {
         setTimeout(() => {
             messagesArea.scrollTop = messagesArea.scrollHeight;
         }, 100);
+    }
+}
+
+// Копирование ссылки на опрос (заглушка, только уведомление)
+function copyPollLink() {
+    showCopyToast();
+}
+
+// Показ уведомления "Ссылка скопирована"
+function showCopyToast() {
+    const toast = document.getElementById('copyToast');
+    if (toast) {
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2000);
     }
 }
 
@@ -256,7 +295,50 @@ function showResults() {
     window.location.href = 'match-results.html';
 }
 
-// Функции для бокового меню
+function chooseTogether() {
+    const currentChat = JSON.parse(localStorage.getItem('currentChat') || '{}');
+    const chatId = currentChat.id || 1;
+    
+    localStorage.removeItem('votedEvents');
+    localStorage.removeItem('hasVoted');
+    localStorage.removeItem('pollVoters');
+    
+    window.location.href = 'filters.html';
+}
+
+function chooseTogetherFromAttach() {
+    const panel = document.getElementById('attachPanel');
+    if (panel) panel.classList.remove('show');
+    chooseTogether();
+}
+
+function toggleAttachPanel() {
+    const panel = document.getElementById('attachPanel');
+    if (panel) {
+        panel.classList.toggle('show');
+    }
+}
+
+function attachPhoto() {
+    alert('Выбрать фото\n\nФункция будет доступна в следующей версии');
+    document.getElementById('attachPanel')?.classList.remove('show');
+}
+
+function attachVideo() {
+    alert('Выбрать видео\n\nФункция будет доступна в следующей версии');
+    document.getElementById('attachPanel')?.classList.remove('show');
+}
+
+function attachDocument() {
+    alert('Выбрать документ\n\nФункция будет доступна в следующей версии');
+    document.getElementById('attachPanel')?.classList.remove('show');
+}
+
+function attachLocation() {
+    alert('Отправить локацию\n\nФункция будет доступна в следующей версии');
+    document.getElementById('attachPanel')?.classList.remove('show');
+}
+
 function toggleChatSideMenu() {
     const sideMenu = document.getElementById('chatSideMenu');
     const overlay = document.getElementById('chatOverlay');
@@ -276,16 +358,6 @@ function showSettings() {
     closeChatSideMenu();
 }
 
-function createPoll() {
-    alert('Анкета уже создана!');
-    closeChatSideMenu();
-}
-
-function createSurvey() {
-    alert('Создание опроса будет доступно в следующей версии');
-    closeChatSideMenu();
-}
-
 function showNotifications() {
     alert('Уведомления будут доступны в следующей версии');
     closeChatSideMenu();
@@ -296,24 +368,22 @@ function showParticipants() {
     closeChatSideMenu();
 }
 
-function showMonth() {
-    alert('Календарь мероприятий будет доступен в следующей версии');
-    closeChatSideMenu();
-}
-
 function showSearch() {
     alert('Поиск по чату будет доступен в следующей версии');
     closeChatSideMenu();
 }
 
-function toggleAttachPanel() {
-    alert('Прикрепить файл\n\nФункция будет доступна в следующей версии');
-}
-
 function goBack() {
-    // Возврат к списку всех чатов
     window.location.href = 'choose-together.html';
 }
+
+document.addEventListener('click', function(e) {
+    const panel = document.getElementById('attachPanel');
+    const attachBtn = document.querySelector('.attach-btn');
+    if (panel && attachBtn && !panel.contains(e.target) && !attachBtn.contains(e.target)) {
+        panel.classList.remove('show');
+    }
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     loadVotingResults();

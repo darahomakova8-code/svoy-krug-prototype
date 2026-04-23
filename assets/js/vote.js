@@ -1,4 +1,4 @@
-// Данные мероприятий
+// Данные мероприятий (5 мероприятий, без эмодзи)
 let events = [
     {
         id: 1,
@@ -9,7 +9,7 @@ let events = [
         location: "ул. Кушелевская дорога, 6",
         price: "1500 р",
         description: "Это уникальная возможность услышать, как звучат мандолина и дудук в старинных интерьерах",
-        imageIcon: "🎵"
+        icon: "music-note-beamed"
     },
     {
         id: 2,
@@ -20,7 +20,7 @@ let events = [
         location: "Джаз-клуб 'Союз'",
         price: "1200 р",
         description: "Живое исполнение джазовых стандартов в уютной атмосфере",
-        imageIcon: "🎷"
+        icon: "music-note-beamed"
     },
     {
         id: 3,
@@ -31,7 +31,7 @@ let events = [
         location: "Музей искусств",
         price: "800 р",
         description: "Выставка работ импрессионистов из частных коллекций",
-        imageIcon: "🖼️"
+        icon: "palette-fill"
     },
     {
         id: 4,
@@ -42,7 +42,7 @@ let events = [
         location: "Гончарная мастерская 'Круг'",
         price: "2000 р",
         description: "Создайте свою первую керамическую чашку под руководством мастера",
-        imageIcon: "🏺"
+        icon: "cup-straw"
     },
     {
         id: 5,
@@ -53,18 +53,7 @@ let events = [
         location: "Кинотеатр 'Звезда'",
         price: "500 р",
         description: "Ночной показ культовых триллеров с обсуждением после фильма",
-        imageIcon: "🎬"
-    },
-    {
-        id: 6,
-        title: "Фестиваль уличной еды",
-        category: "Еда",
-        date: "2 апреля 2026",
-        time: "12:00",
-        location: "Парк культуры",
-        price: "Вход свободный",
-        description: "Более 30 фуд-траков с кухнями разных стран мира",
-        imageIcon: "🍔"
+        icon: "film"
     }
 ];
 
@@ -96,7 +85,7 @@ function renderEvent() {
     container.innerHTML = `
         <div class="event-card" id="currentEventCard">
             <div class="event-image">
-                <i class="bi bi-${getIconName(event.imageIcon)}"></i>
+                <i class="bi bi-${event.icon}"></i>
                 <div class="event-category">${event.category}</div>
             </div>
             <div class="event-info">
@@ -118,7 +107,7 @@ function renderEvent() {
         </div>
     `;
     
-    // Обновляем прогресс-бар (только полоска, без текста)
+    // Обновляем прогресс-бар
     const progress = (currentIndex / events.length) * 100;
     if (progressFill) {
         progressFill.style.width = `${progress}%`;
@@ -126,18 +115,6 @@ function renderEvent() {
     if (progressCounter) {
         progressCounter.textContent = `${currentIndex}/${events.length}`;
     }
-}
-
-function getIconName(emoji) {
-    const icons = {
-        '🎵': 'music-note-beamed',
-        '🎷': 'music-note-beamed',
-        '🖼️': 'palette-fill',
-        '🏺': 'cup-straw',
-        '🎬': 'film',
-        '🍔': 'cup-straw'
-    };
-    return icons[emoji] || 'star-fill';
 }
 
 function showDetails(eventId) {
@@ -177,13 +154,22 @@ function animateAndNext(action) {
 }
 
 function finishVoting() {
-    // Сохраняем выбранные мероприятия в localStorage
+    // Сохраняем выбранные мероприятия
     localStorage.setItem('votedEvents', JSON.stringify(selectedEvents));
+    localStorage.setItem('hasVoted', 'true');
     
-    const selectedNames = selectedEvents.map(e => e.title).join('\n');
-    alert(`🎉 Голосование завершено!\n\nВы выбрали ${selectedEvents.length} мероприятий:\n${selectedNames}`);
+    const voters = JSON.parse(localStorage.getItem('pollVoters') || '[]');
+    if (!voters.includes('Ирина')) {
+        voters.push('Ирина');
+        localStorage.setItem('pollVoters', JSON.stringify(voters));
+    }
     
-    // Возвращаемся в чат
+    // Получаем текущий чат и обновляем статус на "voted"
+    const currentChat = JSON.parse(localStorage.getItem('currentChat') || '{}');
+    const chatId = currentChat.id || 1;
+    localStorage.setItem(`pollStatus_${chatId}`, 'voted');
+    
+    // Переход на чат с плашкой
     window.location.href = 'chat-with-poll.html';
 }
 
@@ -223,23 +209,3 @@ document.addEventListener('DOMContentLoaded', () => {
         cardContainer.addEventListener('touchend', handleTouchEnd);
     }
 });
-
-function finishVoting() {
-    // Сохраняем выбранные мероприятия
-    localStorage.setItem('votedEvents', JSON.stringify(selectedEvents));
-    localStorage.setItem('hasVoted', 'true');
-    
-    const voters = JSON.parse(localStorage.getItem('pollVoters') || '[]');
-    if (!voters.includes('Ирина')) {
-        voters.push('Ирина');
-        localStorage.setItem('pollVoters', JSON.stringify(voters));
-    }
-    
-    // Получаем текущий чат и обновляем статус на "voted"
-    const currentChat = JSON.parse(localStorage.getItem('currentChat') || '{}');
-    const chatId = currentChat.id || 1;
-    localStorage.setItem(`pollStatus_${chatId}`, 'voted');
-    
-    // Переход на чат с плашкой
-    window.location.href = 'chat-with-poll.html';
-}

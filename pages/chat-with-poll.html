@@ -47,6 +47,30 @@
                 <i class="bi bi-send-fill"></i>
             </button>
         </div>
+
+        <!-- Панель для вставки файлов (скрепка) -->
+        <div class="attach-preview" id="attachPanel">
+            <div class="attach-option" onclick="attachPhoto()">
+                <i class="bi bi-image"></i>
+                <span>Фото</span>
+            </div>
+            <div class="attach-option" onclick="attachVideo()">
+                <i class="bi bi-camera-reels"></i>
+                <span>Видео</span>
+            </div>
+            <div class="attach-option" onclick="attachDocument()">
+                <i class="bi bi-file-earmark"></i>
+                <span>Документ</span>
+            </div>
+            <div class="attach-option" onclick="attachLocation()">
+                <i class="bi bi-geo-alt"></i>
+                <span>Локация</span>
+            </div>
+            <div class="attach-option attach-option-together" onclick="chooseTogetherFromAttach()">
+                <i class="bi bi-people-fill"></i>
+                <span>Выбираем Вместе</span>
+            </div>
+        </div>
         
         <!-- Боковое меню чата -->
         <div class="chat-side-menu" id="chatSideMenu">
@@ -64,15 +88,6 @@
                     <i class="bi bi-gear"></i>
                     <span>Общие настройки</span>
                 </div>
-                <div class="chat-side-menu-item choose-together-item" onclick="createPoll()">
-                    <i class="bi bi-people"></i>
-                    <span>Выбираем Вместе</span>
-                    <div class="badge">⭐</div>
-                </div>
-                <div class="chat-side-menu-item" onclick="createSurvey()">
-                    <i class="bi bi-bar-chart"></i>
-                    <span>Создать опрос</span>
-                </div>
                 <div class="chat-side-menu-item" onclick="showNotifications()">
                     <i class="bi bi-bell"></i>
                     <span>Уведомления</span>
@@ -80,10 +95,6 @@
                 <div class="chat-side-menu-item" onclick="showParticipants()">
                     <i class="bi bi-people"></i>
                     <span>Участники</span>
-                </div>
-                <div class="chat-side-menu-item" onclick="showMonth()">
-                    <i class="bi bi-calendar"></i>
-                    <span>Месяц</span>
                 </div>
                 <div class="chat-side-menu-item" onclick="showSearch()">
                     <i class="bi bi-search"></i>
@@ -93,6 +104,12 @@
         </div>
         
         <div class="chat-overlay" id="chatOverlay" onclick="closeChatSideMenu()"></div>
+        
+        <!-- Уведомление "Ссылка скопирована" -->
+        <div class="copy-toast" id="copyToast">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>Ссылка скопирована</span>
+        </div>
     </div>
     
     <script src="../assets/js/chat-poll.js"></script>

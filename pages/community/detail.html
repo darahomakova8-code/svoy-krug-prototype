@@ -19,13 +19,61 @@
             <h1>Киноклуб</h1>
         </div>
 
+        <!-- Боковое меню -->
+        <div class="side-menu" id="sideMenu">
+            <div class="side-menu-header">
+                <div class="close-menu" onclick="toggleSideMenu()">
+                    <i class="bi bi-x-lg"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="bi bi-person-circle"></i>
+                    </div>
+                    <div class="user-name">Гость</div>
+                </div>
+            </div>
+            <nav class="side-menu-nav">
+                <div class="side-menu-item" onclick="navigateTo('feed.html')">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Найти компанию</span>
+                </div>
+                <div class="side-menu-item" onclick="alert('Друзья скоро!')">
+                    <i class="bi bi-person-heart"></i>
+                    <span>Друзья</span>
+                </div>
+                <div class="side-menu-item" onclick="navigateTo('my-anketas.html')">
+                    <i class="bi bi-file-text-fill"></i>
+                    <span>Мои события</span>
+                </div>
+                <div class="side-menu-divider"></div>
+                <div class="side-menu-section-title"><span>Выбираем вместе</span></div>
+                <div class="side-menu-item" onclick="navigateTo('../create-chat.html')">
+                    <i class="bi bi-plus-circle"></i>
+                    <span>Создать чат</span>
+                </div>
+                <div class="side-menu-item" onclick="navigateTo('../choose-together.html')">
+                    <i class="bi bi-chat-text"></i>
+                    <span>Мои чаты</span>
+                </div>
+                <div class="side-menu-divider"></div>
+                <div class="side-menu-item" onclick="alert('Челленджи скоро!')">
+                    <i class="bi bi-trophy-fill"></i>
+                    <span>Челленджи</span>
+                </div>
+                <div class="side-menu-item" onclick="alert('Колесо удачи скоро!')">
+                    <i class="bi bi-suit-club-fill"></i>
+                    <span>Колесо удачи</span>
+                </div>
+            </nav>
+        </div>
+        <div class="overlay" id="overlay" onclick="toggleSideMenu()"></div>
+
         <div class="content-scroll">
-            <!-- Фото сообщества (на всю ширину) -->
+            <!-- Фото сообщества -->
             <div class="community-cover-section">
                 <div class="community-cover">
                     <i class="bi bi-film"></i>
                 </div>
-                <!-- Краткое описание с рейтингом справа внизу -->
                 <div class="community-badge">
                     <div class="badge-item">
                         <div class="badge-label">Участников</div>
@@ -38,7 +86,7 @@
                 </div>
             </div>
 
-            <!-- Описание сообщества (белая плашка) -->
+            <!-- Описание сообщества -->
             <div class="community-description-text">
                 Смотрим и обсуждаем лучшее кино. Место для тех, кто любит думать и говорить о фильмах.
             </div>
@@ -49,17 +97,17 @@
                     Чат сообщества
                 </div>
                 <div class="action-btn find-partner-btn" onclick="openFindPartner()">
-                    Создать ивент
+                    Создать событие
                 </div>
             </div>
 
             <!-- Заголовок с фильтром -->
             <div class="section-header">
-                <h2>Активные предложения</h2>
+                <h2>Активные события</h2>
                 <i class="bi bi-sliders2 filter-icon" onclick="toggleAnketaFilter()"></i>
             </div>
 
-            <!-- Панель фильтров анкет -->
+            <!-- Панель фильтров -->
             <div class="filter-panel" id="anketaFilterPanel">
                 <div class="filter-row">
                     <div class="filter-label">Пол</div>
@@ -91,6 +139,7 @@
             <div id="anketasList"></div>
         </div>
 
+        <!-- Нижняя навигация -->
         <nav class="bottom-nav-icons">
             <div class="nav-icon-item" onclick="toggleSideMenu()">
                 <i class="bi bi-list"></i>

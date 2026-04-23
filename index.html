@@ -20,7 +20,7 @@
             <div class="header-placeholder"></div>
         </header>
 
-        <!-- Боковое меню (бургер) -->
+        <!-- Боковое меню -->
         <div class="side-menu" id="sideMenu">
             <div class="side-menu-header">
                 <div class="close-menu" onclick="toggleSideMenu()">
@@ -36,7 +36,7 @@
             <nav class="side-menu-nav">
                 <div class="side-menu-item" onclick="navigateTo('pages/community/feed.html')">
                     <i class="bi bi-people-fill"></i>
-                    <span>Сообщества</span>
+                    <span>Найти компанию</span>
                 </div>
                 <div class="side-menu-item" onclick="alert('Друзья скоро!')">
                     <i class="bi bi-person-heart"></i>
@@ -46,12 +46,8 @@
                     <i class="bi bi-file-text-fill"></i>
                     <span>Мои события</span>
                 </div>
-                
                 <div class="side-menu-divider"></div>
-                
-                <div class="side-menu-section-title">
-                    <span>Выбираем вместе</span>
-                </div>
+                <div class="side-menu-section-title"><span>Выбираем вместе</span></div>
                 <div class="side-menu-item" onclick="navigateTo('pages/create-chat.html')">
                     <i class="bi bi-plus-circle"></i>
                     <span>Создать чат</span>
@@ -60,9 +56,7 @@
                     <i class="bi bi-chat-text"></i>
                     <span>Мои чаты</span>
                 </div>
-                
                 <div class="side-menu-divider"></div>
-                
                 <div class="side-menu-item" onclick="alert('Челленджи скоро!')">
                     <i class="bi bi-trophy-fill"></i>
                     <span>Челленджи</span>
@@ -73,20 +67,17 @@
                 </div>
             </nav>
         </div>
-
         <div class="overlay" id="overlay" onclick="toggleSideMenu()"></div>
 
         <div class="content-scroll" id="mainContent">
             
-            <!-- Карусель рекламных баннеров -->
+            <!-- Карусель -->
             <div class="carousel-container">
                 <div class="carousel-track">
                     <div class="carousel-slides" id="carouselSlides">
                         <div class="carousel-slide">
                             <div class="promo-card-large">
-                                <div class="promo-icon-large">
-                                    <i class="bi bi-calendar-heart"></i>
-                                </div>
+                                <div class="promo-icon-large"><i class="bi bi-calendar-heart"></i></div>
                                 <div class="promo-content-large">
                                     <h3>Мероприятия для компании</h3>
                                     <p>Решите с друзьями куда пойти без муки выбора</p>
@@ -96,37 +87,11 @@
                         </div>
                         <div class="carousel-slide">
                             <div class="promo-card-large">
-                                <div class="promo-icon-large">
-                                    <i class="bi bi-people-fill"></i>
-                                </div>
+                                <div class="promo-icon-large"><i class="bi bi-people-fill"></i></div>
                                 <div class="promo-content-large">
                                     <h3>Найди компанию</h3>
                                     <p>Присоединяйся к сообществам по интересам</p>
                                     <button class="promo-button" onclick="navigateTo('pages/community/feed.html')">Найти →</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="carousel-slide">
-                            <div class="promo-card-large">
-                                <div class="promo-icon-large">
-                                    <i class="bi bi-trophy-fill"></i>
-                                </div>
-                                <div class="promo-content-large">
-                                    <h3>Челленджи</h3>
-                                    <p>Выполняй задания, получай баллы и призы!</p>
-                                    <button class="promo-button" onclick="alert('Челленджи скоро!')">Узнать →</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="carousel-slide">
-                            <div class="promo-card-large">
-                                <div class="promo-icon-large">
-                                    <i class="bi bi-suit-club-fill"></i>
-                                </div>
-                                <div class="promo-content-large">
-                                    <h3>Колесо фортуны</h3>
-                                    <p>Крути и получай скидки и бонусы каждый день!</p>
-                                    <button class="promo-button" onclick="alert('Колесо удачи скоро!')">Крутить →</button>
                                 </div>
                             </div>
                         </div>
@@ -135,108 +100,59 @@
                 <div class="carousel-dots" id="carouselDots"></div>
             </div>
 
-<!-- Сторис (инструкция) -->
-<div class="stories-wrapper">
-    <div class="stories-header">
-        <span>Инструкция</span>
-    </div>
-    <div class="stories-container">
-        <div class="story-item" data-story="1" onclick="showStory(1)">
-            <div class="story-circle">
-                <div class="story-circle-inner">
-                    <i class="bi bi-search"></i>
+            <!-- Сторис -->
+            <div class="stories-wrapper">
+                <div class="section-header">
+                    <h3>Инструкция</h3>
+                </div>
+                <div class="stories-container">
+                    <div class="story-item" onclick="showStory(1)">
+                        <div class="story-circle"><div class="story-circle-inner"><i class="bi bi-search"></i></div></div>
+                        <span class="story-label">Выбираем<br>Вместе</span>
+                    </div>
+                    <div class="story-item" onclick="showStory(2)">
+                        <div class="story-circle"><div class="story-circle-inner"><i class="bi bi-calendar-plus"></i></div></div>
+                        <span class="story-label">Создать<br>событие</span>
+                    </div>
+                    <div class="story-item" onclick="showStory(3)">
+                        <div class="story-circle"><div class="story-circle-inner"><i class="bi bi-people"></i></div></div>
+                        <span class="story-label">Откликнуться<br>на событие</span>
+                    </div>
+                    <div class="story-item" onclick="showStory(4)">
+                        <div class="story-circle"><div class="story-circle-inner"><i class="bi bi-trophy"></i></div></div>
+                        <span class="story-label">Челленджи</span>
+                    </div>
                 </div>
             </div>
-            <span class="story-label">Выбираем<br>Вместе</span>
-        </div>
-        <div class="story-item" data-story="2" onclick="showStory(2)">
-            <div class="story-circle">
-                <div class="story-circle-inner">
-                    <i class="bi bi-calendar-plus"></i>
-                </div>
-            </div>
-            <span class="story-label">Создать<br>ивент</span>
-        </div>
-        <div class="story-item" data-story="3" onclick="showStory(3)">
-            <div class="story-circle">
-                <div class="story-circle-inner">
-                    <i class="bi bi-people"></i>
-                </div>
-            </div>
-            <span class="story-label">Найти<br>друга</span>
-        </div>
-        <div class="story-item" data-story="4" onclick="showStory(4)">
-            <div class="story-circle">
-                <div class="story-circle-inner">
-                    <i class="bi bi-trophy"></i>
-                </div>
-            </div>
-            <span class="story-label">Челленджи</span>
-        </div>
-    </div>
-</div>
 
-<!-- Плашка-приветствие -->
-<div class="welcome-toast" id="welcomeToast">
-    <button class="welcome-toast-close" onclick="closeWelcomeToast()">
-        <i class="bi bi-x-lg"></i>
-    </button>
-    <div class="welcome-toast-content">
-        <div class="welcome-toast-icon">
-            <i class="bi bi-megaphone-fill"></i>
-        </div>
-        <div class="welcome-toast-text">
-            <h4>Новые функции!</h4>
-            <p>В сервисе появились три новые функции. Ознакомьтесь с инструкцией!</p>
-            <button class="welcome-toast-btn" onclick="highlightStories()">Ознакомиться →</button>
-        </div>
-    </div>
-</div>
+            <!-- Мои события -->
+            <div class="events-section">
+                <div class="section-header">
+                    <h3>Мои события</h3>
+                    <span class="section-link" onclick="navigateTo('pages/community/my-anketas.html')">Все <i class="bi bi-arrow-right"></i></span>
+                </div>
+                <div id="homeEventsContainer"></div>
+            </div>
 
-            <!-- О приложении -->
-            <div class="about-section">
-                <h3>О приложении</h3>
-                <p>Свой Круг – это первая социальная сеть для активных жителей, где живые мероприятия превращаются в увлекательный квест.</p>
-                <p class="about-quote">Хватит сидеть в одиночестве — найди компанию на концерт, сходи на мероприятие и получи скидку за свою активность!</p>
+            <!-- Рекомендации -->
+            <div class="recommendations-section">
+                <div class="section-header">
+                    <h3>Рекомендации</h3>
+                    <span class="section-link" onclick="alert('Все рекомендации')">Все <i class="bi bi-arrow-right"></i></span>
+                </div>
+                <div class="recommendations-grid" id="recommendationsGrid"></div>
             </div>
 
         </div>
 
-        <!-- Нижняя навигация с иконками -->
+        <!-- Нижняя навигация -->
         <nav class="bottom-nav-icons">
-            <div class="nav-icon-item" onclick="toggleSideMenu()">
-                <i class="bi bi-list"></i>
-            </div>
-            <div class="nav-icon-item active" onclick="navigateTo('index.html')">
-                <i class="bi bi-house-door-fill"></i>
-            </div>
-            <div class="nav-icon-item" onclick="alert('Все мероприятия в разработке')">
-                <i class="bi bi-ticket-perforated-fill"></i>
-            </div>
-            <div class="nav-icon-item" onclick="alert('Избранное в разработке')">
-                <i class="bi bi-heart-fill"></i>
-            </div>
-            <div class="nav-icon-item" onclick="alert('Личный кабинет в разработке')">
-                <i class="bi bi-person-fill"></i>
-            </div>
+            <div class="nav-icon-item" onclick="toggleSideMenu()"><i class="bi bi-list"></i></div>
+            <div class="nav-icon-item active" onclick="navigateTo('index.html')"><i class="bi bi-house-door-fill"></i></div>
+            <div class="nav-icon-item" onclick="alert('Все мероприятия в разработке')"><i class="bi bi-ticket-perforated-fill"></i></div>
+            <div class="nav-icon-item" onclick="alert('Избранное в разработке')"><i class="bi bi-heart-fill"></i></div>
+            <div class="nav-icon-item" onclick="alert('Личный кабинет в разработке')"><i class="bi bi-person-fill"></i></div>
         </nav>
-    </div>
-
-    <!-- Плашка-приветствие -->
-    <div class="welcome-toast" id="welcomeToast">
-        <div class="welcome-toast-content">
-            <div class="welcome-toast-icon">
-                <i class="bi bi-megaphone-fill"></i>
-            </div>
-            <div class="welcome-toast-text">
-                <h4>Новые функции!</h4>
-                <p>В сервисе появились 3 новые функции: "Выбираем вместе" "Создать мероприятие" и "Найти друга". Ознакомьтесь с инструкцией!</p>
-                <button class="welcome-toast-btn" onclick="highlightStories()">Ознакомиться →</button>
-            </div>
-            <button class="welcome-toast-close" onclick="closeWelcomeToast()">
-                <i class="bi bi-x-lg"></i>
-            </button>
-        </div>
     </div>
 
     <script src="assets/js/main.js"></script>

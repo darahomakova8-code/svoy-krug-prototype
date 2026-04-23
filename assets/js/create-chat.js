@@ -4,10 +4,7 @@ let selectedFriends = [];
 const availableFriends = [
     { id: 1, name: "Иван", avatar: "И", initial: "И" },
     { id: 2, name: "Анастасия", avatar: "А", initial: "А" },
-    { id: 3, name: "Дмитрий", avatar: "Д", initial: "Д" },
-    { id: 4, name: "Екатерина", avatar: "Е", initial: "Е" },
-    { id: 5, name: "Сергей", avatar: "С", initial: "С" },
-    { id: 6, name: "Ольга", avatar: "О", initial: "О" }
+    { id: 3, name: "Дмитрий", avatar: "Д", initial: "Д" }
 ];
 
 function renderFriendsList() {
@@ -38,7 +35,6 @@ function toggleFriend(friendId) {
     
     renderFriendsList();
     updateParticipantsList();
-    // Убираем вызов updateInvitedFriendsList()
 }
 
 function updateParticipantsList() {
@@ -120,8 +116,11 @@ function createNewChat() {
     chats.unshift(newChat);
     localStorage.setItem('chooseTogetherChats', JSON.stringify(chats));
     
-    alert(`Чат "${groupName}" успешно создан!`);
-    window.location.href = 'choose-together.html'; // Возврат на страницу со списком чатов
+    // Сохраняем текущий чат для использования в chat.html
+    localStorage.setItem('currentChat', JSON.stringify(newChat));
+    
+    // Переход сразу в chat.html
+    window.location.href = 'chat.html';
 }
 
 function navigateTo(page) {
@@ -178,11 +177,11 @@ function openSideMenu() {
                     <span>Мои чаты</span>
                 </div>
                 <div class="side-menu-divider"></div>
-                <div class="side-menu-item" onclick="alert('🏆 Челленджи скоро!')">
+                <div class="side-menu-item" onclick="alert('Челленджи скоро!')">
                     <i class="bi bi-trophy-fill"></i>
                     <span>Челленджи</span>
                 </div>
-                <div class="side-menu-item" onclick="alert('🎡 Колесо удачи скоро!')">
+                <div class="side-menu-item" onclick="alert('Колесо удачи скоро!')">
                     <i class="bi bi-suit-club-fill"></i>
                     <span>Колесо удачи</span>
                 </div>

@@ -163,7 +163,7 @@ function openSideMenu() {
             <nav class="side-menu-nav">
                 <div class="side-menu-item" onclick="navigateTo('../pages/community/feed.html')">
                     <i class="bi bi-people-fill"></i>
-                    <span>Сообщества</span>
+                    <span>Найти компанию</span>
                 </div>
                 <div class="side-menu-item" onclick="navigateTo('../pages/community/feed.html')">
                     <i class="bi bi-person-heart"></i>

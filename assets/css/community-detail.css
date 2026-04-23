@@ -303,6 +303,17 @@
     color: #999;
 }
 
+/* Бейдж "Вы" для своих анкет */
+.own-badge {
+    background: rgba(244, 29, 145, 0.1);
+    color: #F41D91;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 4px;
+}
+
 .event-title {
     font-size: 18px;
     font-weight: 700;
@@ -355,6 +366,7 @@
     color: #999;
 }
 
+/* Кнопка "Мне интересно" */
 .interested-btn {
     background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
     border: none;
@@ -367,6 +379,23 @@
 }
 
 .interested-btn:active {
+    transform: scale(0.95);
+}
+
+/* Кнопка "Смотреть" для своих анкет */
+.view-btn {
+    background: white;
+    border: 1.5px solid #F41D91;
+    padding: 10px 24px;
+    border-radius: 30px;
+    color: #F41D91;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.view-btn:active {
+    background: rgba(244, 29, 145, 0.05);
     transform: scale(0.95);
 }
 

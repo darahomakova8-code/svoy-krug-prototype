@@ -6,17 +6,49 @@ let selectedFriends = [];
 let availableFriends = [
     { id: 1, name: "Анна", initial: "А", status: "Онлайн" },
     { id: 2, name: "Михаил", initial: "М", status: "Онлайн" },
-    { id: 3, name: "Екатерина", initial: "Е", status: "Был(а) недавно" },
-    { id: 4, name: "Дмитрий", initial: "Д", status: "Онлайн" },
-    { id: 5, name: "Ольга", initial: "О", status: "Был(а) вчера" }
+    { id: 3, name: "Екатерина", initial: "Е", status: "Был(а) недавно" }
 ];
+
+// ========== НАВИГАЦИЯ ==========
+function navigateTo(page) {
+    window.location.href = page;
+}
+
+// ========== БОКОВОЕ МЕНЮ ==========
+function toggleSideMenu() {
+    const sideMenu = document.getElementById('sideMenu');
+    const overlay = document.getElementById('overlay');
+    if (sideMenu && overlay) {
+        sideMenu.classList.toggle('open');
+        overlay.classList.toggle('show');
+    }
+}
+
+// ========== АВТОЗАПОЛНЕНИЕ ==========
+function autoFillForm() {
+    document.getElementById('eventTitle').value = 'Просмотр фильма Аватар';
+    document.getElementById('description').value = 'Посмотрим фильм, а потом обсудим в кафе!';
+    document.getElementById('location').value = 'Новая Галандия';
+    document.getElementById('peopleCount').value = '4';
+    document.getElementById('ageMin').value = '20';
+    document.getElementById('ageMax').value = '45';
+    
+    // Выбираем пол "Неважно"
+    document.querySelectorAll('.gender-option').forEach((btn, index) => {
+        if (index === 2) {
+            btn.classList.add('active');
+            selectedGender = 'any';
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+}
 
 function loadCommunityData() {
     const communityId = localStorage.getItem('selectedCommunityId');
     if (communityId) {
         const communities = {
-            1: "Киноклуб", 2: "Беговой клуб", 3: "Team-билдинг",
-            4: "Книжный клуб", 5: "Музейный гид", 6: "Собаководы"
+            1: "Киноклуб", 2: "Беговой клуб", 3: "Книжный клуб"
         };
         currentCommunity.name = communities[communityId] || "Киноклуб";
     }
@@ -31,7 +63,6 @@ function selectGender(element, gender) {
 
 // Открытие модального окна выбора друзей
 function openAddFriendsModal() {
-    selectedFriends = [];
     const modalHtml = `
         <div class="friends-modal-overlay" id="friendModalOverlay">
             <div class="friends-modal-content">
@@ -84,10 +115,6 @@ function closeFriendModal() {
 
 function confirmAddFriends() {
     selectedFriends = availableFriends.filter(f => window.selectedFriendsIds.includes(f.id));
-    if (selectedFriends.length === 0) {
-        alert('Выберите хотя бы одного друга');
-        return;
-    }
     closeFriendModal();
     updateFriendsPreview();
 }
@@ -96,38 +123,47 @@ function updateFriendsPreview() {
     const container = document.getElementById('selectedFriendsPreview');
     const countSpan = document.getElementById('selectedFriendsCount');
     
+    if (!container) return;
+    
     if (selectedFriends.length === 0) {
         container.innerHTML = '';
-        countSpan.textContent = '0';
+        if (countSpan) countSpan.textContent = '0';
         return;
     }
     
     container.innerHTML = selectedFriends.map(f => `
-        <div class="selected-friend-avatar">${f.initial}</div>
+        <div class="selected-friend-avatar" onclick="event.stopPropagation(); removeFriend(${f.id})">
+            ${f.initial}
+            <div class="remove-friend">
+                <i class="bi bi-x"></i>
+            </div>
+        </div>
     `).join('');
-    countSpan.textContent = selectedFriends.length;
+    
+    if (countSpan) countSpan.textContent = selectedFriends.length;
 }
 
 function removeFriend(friendId) {
     selectedFriends = selectedFriends.filter(f => f.id !== friendId);
     updateFriendsPreview();
+    window.updateFriendsPreview();
 }
 
 function publishAnketa() {
-    const eventTitle = document.getElementById('eventTitle').value;
-    const description = document.getElementById('description').value;
-    const dateStart = document.getElementById('dateStart').value;
-    const location = document.getElementById('location').value;
-    const peopleCount = document.getElementById('peopleCount').value;
-    const ageMin = document.getElementById('ageMin').value;
-    const ageMax = document.getElementById('ageMax').value;
+    const eventTitle = document.getElementById('eventTitle')?.value || '';
+    const description = document.getElementById('description')?.value || '';
+    const dateStart = document.getElementById('dateStart')?.value || '';
+    const location = document.getElementById('location')?.value || '';
+    const peopleCount = document.getElementById('peopleCount')?.value || '2';
+    const ageMin = document.getElementById('ageMin')?.value || '18';
+    const ageMax = document.getElementById('ageMax')?.value || '99';
     
     if (!eventTitle || !description || !dateStart || !location) {
         alert('Заполните все обязательные поля');
         return;
     }
     
-    // Формируем список участников: организатор + выбранные друзья
+    // Формируем список участников
     const participants = [
         { name: "Вы", role: "Организатор", initial: "В" }
     ];
@@ -162,22 +198,38 @@ function publishAnketa() {
     existingAnketas.push(newAnketa);
     localStorage.setItem('userAnketas', JSON.stringify(existingAnketas));
     
-    alert(`Анкета "${eventTitle}" опубликована! Приглашено друзей: ${selectedFriends.length}`);
-    window.location.href = 'my-anketas.html';
+    // Сохраняем ID созданного мероприятия
+    localStorage.setItem('selectedEventId', newAnketa.id);
+    
+    alert(`Анкета "${eventTitle}" опубликована!`);
+    
+    // Переход на страницу мероприятия
+    window.location.href = 'event-detail.html';
 }
 
 function goBack() { 
-    window.location.href = 'detail.html'; 
+    window.history.back();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     loadCommunityData();
+    
     const today = new Date().toISOString().split('T')[0];
-    document.getElementById('dateStart').value = today;
-    document.getElementById('dateEnd').value = today;
+    const dateStartInput = document.getElementById('dateStart');
+    const dateEndInput = document.getElementById('dateEnd');
+    
+    if (dateStartInput) dateStartInput.value = today;
+    if (dateEndInput) dateEndInput.value = today;
+    
+    // Закрытие меню при клике на пункты
+    document.querySelectorAll('.side-menu-item').forEach(item => {
+        item.addEventListener('click', () => {
+            setTimeout(() => toggleSideMenu(), 150);
+        });
+    });
 });
 
-// В конец файла добавь:
+// Обновление превью приглашённых друзей
 window.updateFriendsPreview = function() {
     const container = document.getElementById('invitedFriendsList');
     const counter = document.getElementById('friendsCounter');
@@ -187,7 +239,7 @@ window.updateFriendsPreview = function() {
     
     if (selectedFriends.length === 0) {
         container.innerHTML = '';
-        counter.style.display = 'none';
+        if (counter) counter.style.display = 'none';
         return;
     }
     
@@ -200,11 +252,12 @@ window.updateFriendsPreview = function() {
         </div>
     `).join('');
     
-    countSpan.textContent = selectedFriends.length;
-    counter.style.display = 'flex';
+    if (countSpan) countSpan.textContent = selectedFriends.length;
+    if (counter) counter.style.display = 'flex';
 };
 
 window.removeFriend = function(friendId) {
     selectedFriends = selectedFriends.filter(f => f.id !== friendId);
     updateFriendsPreview();
+    window.updateFriendsPreview();
 };

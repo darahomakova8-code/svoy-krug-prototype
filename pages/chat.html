@@ -35,84 +35,78 @@
             <div id="messagesContainer"></div>
         </div>
         
-<!-- Поле ввода -->
-<div class="message-input-area">
-    <div class="input-wrapper">
-        <button class="attach-btn" onclick="toggleAttachPanel()">
-            <i class="bi bi-paperclip"></i>
-        </button>
-        <input type="text" class="message-input" id="messageInput" placeholder="Сообщение...">
-    </div>
-    <button class="send-btn" onclick="sendMessage()">
-        <i class="bi bi-send-fill"></i>
-    </button>
-</div>
-
-<!-- Панель для вставки файлов -->
-<div class="attach-preview" id="attachPanel">
-    <div class="attach-option" onclick="attachPhoto()">
-        <i class="bi bi-image"></i>
-        <span>Фото</span>
-    </div>
-    <div class="attach-option" onclick="attachVideo()">
-        <i class="bi bi-camera-reels"></i>
-        <span>Видео</span>
-    </div>
-    <div class="attach-option" onclick="attachDocument()">
-        <i class="bi bi-file-earmark"></i>
-        <span>Документ</span>
-    </div>
-    <div class="attach-option" onclick="attachLocation()">
-        <i class="bi bi-geo-alt"></i>
-        <span>Локация</span>
-    </div>
-</div>
-    
-    <!-- Боковое меню чата -->
-    <div class="chat-side-menu" id="chatSideMenu">
-        <div class="chat-side-menu-header">
-            <div class="close-menu" onclick="closeChatSideMenu()">
-                <i class="bi bi-x-lg"></i>
+        <!-- Поле ввода -->
+        <div class="message-input-area">
+            <div class="input-wrapper">
+                <button class="attach-btn" onclick="toggleAttachPanel()">
+                    <i class="bi bi-paperclip"></i>
+                </button>
+                <input type="text" class="message-input" id="messageInput" placeholder="Сообщение...">
             </div>
-            <div class="chat-info" style="padding: 8px 0;">
-                <h2>Планы на выходные</h2>
-                <div class="participants-count">4 участника</div>
+            <button class="send-btn" onclick="sendMessage()">
+                <i class="bi bi-send-fill"></i>
+            </button>
+        </div>
+
+        <!-- Панель для вставки файлов (скрепка) -->
+        <div class="attach-preview" id="attachPanel">
+            <div class="attach-option" onclick="attachPhoto()">
+                <i class="bi bi-image"></i>
+                <span>Фото</span>
+            </div>
+            <div class="attach-option" onclick="attachVideo()">
+                <i class="bi bi-camera-reels"></i>
+                <span>Видео</span>
+            </div>
+            <div class="attach-option" onclick="attachDocument()">
+                <i class="bi bi-file-earmark"></i>
+                <span>Документ</span>
+            </div>
+            <div class="attach-option" onclick="attachLocation()">
+                <i class="bi bi-geo-alt"></i>
+                <span>Локация</span>
+            </div>
+            <!-- НОВАЯ ОПЦИЯ: "Вместе" (Выбираем вместе) -->
+            <div class="attach-option attach-option-together" onclick="chooseTogetherFromAttach()">
+                <i class="bi bi-people-fill"></i>
+                <span>Выбираем Вместе</span>
             </div>
         </div>
-        <nav class="chat-side-menu-nav">
-            <div class="chat-side-menu-item" onclick="showSettings()">
-                <i class="bi bi-gear"></i>
-                <span>Общие настройки</span>
+        
+        <!-- Боковое меню чата (пункт "Выбираем вместе" удалён) -->
+        <div class="chat-side-menu" id="chatSideMenu">
+            <div class="chat-side-menu-header">
+                <div class="close-menu" onclick="closeChatSideMenu()">
+                    <i class="bi bi-x-lg"></i>
+                </div>
+                <div class="chat-info" style="padding: 8px 0;">
+                    <h2>Планы на выходные</h2>
+                    <div class="participants-count">4 участника</div>
+                </div>
             </div>
-            <div class="chat-side-menu-item choose-together-item" onclick="chooseTogether()">
-                <i class="bi bi-people"></i>
-                <span>Выбираем Вместе</span>
-                <div class="badge">⭐</div>
-            </div>
-            <div class="chat-side-menu-item" onclick="createPoll()">
-                <i class="bi bi-bar-chart"></i>
-                <span>Создать опрос</span>
-            </div>
-            <div class="chat-side-menu-item" onclick="showNotifications()">
-                <i class="bi bi-bell"></i>
-                <span>Уведомления</span>
-            </div>
-            <div class="chat-side-menu-item" onclick="showParticipants()">
-                <i class="bi bi-people"></i>
-                <span>Участники</span>
-            </div>
-            <div class="chat-side-menu-item" onclick="showSearch()">
-                <i class="bi bi-calendar"></i>
-                <span>Месяц</span>
-            </div>
-            <div class="chat-side-menu-item" onclick="showSearch()">
-                <i class="bi bi-search"></i>
-                <span>Поиск</span>
-            </div>
-        </nav>
+            <nav class="chat-side-menu-nav">
+                <div class="chat-side-menu-item" onclick="showSettings()">
+                    <i class="bi bi-gear"></i>
+                    <span>Общие настройки</span>
+                </div>
+                <!-- Пункт "Выбираем вместе" убран из бокового меню -->
+                <div class="chat-side-menu-item" onclick="showNotifications()">
+                    <i class="bi bi-bell"></i>
+                    <span>Уведомления</span>
+                </div>
+                <div class="chat-side-menu-item" onclick="showParticipants()">
+                    <i class="bi bi-people"></i>
+                    <span>Участники</span>
+                </div>
+                <div class="chat-side-menu-item" onclick="showSearch()">
+                    <i class="bi bi-search"></i>
+                    <span>Поиск</span>
+                </div>
+            </nav>
+        </div>
+        
+        <div class="chat-overlay" id="chatOverlay" onclick="closeChatSideMenu()"></div>
     </div>
-    
-    <div class="chat-overlay" id="chatOverlay" onclick="closeChatSideMenu()"></div>
     
     <script src="../assets/js/chat.js"></script>
 </body>

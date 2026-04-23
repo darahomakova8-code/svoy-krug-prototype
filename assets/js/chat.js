@@ -136,7 +136,7 @@ function sendMessage() {
     input.value = '';
 }
 
-// Функция "Выбираем вместе" - переход на фильтры
+// Функция "Выбираем вместе" — переход на фильтры
 function chooseTogether() {
     // Получаем текущий чат
     const currentChat = JSON.parse(localStorage.getItem('currentChat') || '{}');
@@ -146,10 +146,16 @@ function chooseTogether() {
     localStorage.removeItem('votedEvents');
     localStorage.removeItem('hasVoted');
     localStorage.removeItem('pollVoters');
-    // НЕ удаляем pollCreated_${chatId}, потому что анкета еще не создана
     
     // Переход на страницу фильтров
     window.location.href = 'filters.html';
+}
+
+// Функция-обёртка для вызова из панели вложений
+function chooseTogetherFromAttach() {
+    const panel = document.getElementById('attachPanel');
+    if (panel) panel.classList.remove('show');
+    chooseTogether();
 }
 
 // Функции для бокового меню
@@ -220,7 +226,6 @@ function attachLocation() {
 }
 
 function goBack() {
-    // Возврат к списку всех чатов
     window.location.href = 'choose-together.html';
 }
 

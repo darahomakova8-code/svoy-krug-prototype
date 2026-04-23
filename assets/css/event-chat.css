@@ -1,0 +1,458 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Sofia Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #e8f0fe 0%, #e0e8f5 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.chat-container {
+    max-width: 450px;
+    width: 100%;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #f5f9ff 0%, #eef3fc 100%);
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+
+/* Шапка */
+.chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(244, 29, 145, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.back-btn {
+    font-size: 24px;
+    color: #F41D91;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.back-btn:active {
+    transform: scale(0.9);
+}
+
+.event-info h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+.participants-count {
+    font-size: 12px;
+    color: #999;
+}
+
+.header-right {
+    display: flex;
+    gap: 8px;
+}
+
+.header-icon {
+    font-size: 22px;
+    color: #F41D91;
+    cursor: pointer;
+    padding: 6px;
+}
+
+.header-icon:active {
+    transform: scale(0.9);
+}
+
+/* Область сообщений */
+.messages-area {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Дата */
+.message-date {
+    text-align: center;
+    margin: 16px 0 8px;
+}
+
+.message-date span {
+    background: rgba(255,255,255,0.8);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #999;
+}
+
+/* Системное сообщение */
+.system-message {
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+    margin: 8px 0;
+    font-style: italic;
+}
+
+/* Сообщение */
+.message {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+}
+
+.message-own {
+    align-items: flex-end;
+}
+
+.message-other {
+    align-items: flex-start;
+}
+
+.message-sender {
+    font-size: 12px;
+    font-weight: 600;
+    color: #F41D91;
+    margin-bottom: 4px;
+    margin-left: 8px;
+}
+
+.message-bubble {
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.message-own .message-bubble {
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.message-other .message-bubble {
+    background: white;
+    color: #333;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.message-time {
+    font-size: 10px;
+    color: #999;
+    margin-top: 4px;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+/* Поле ввода */
+.message-input-area {
+    padding: 12px 16px;
+    background: white;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    border-top: 1px solid #f0f0f0;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+}
+
+.input-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: #f8f9fa;
+    border-radius: 25px;
+    padding: 4px 8px 4px 16px;
+    border: 1px solid #e0e0e0;
+}
+
+.attach-btn {
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    color: #F2711E;
+    display: flex;
+    align-items: center;
+}
+
+.attach-btn:active {
+    transform: scale(0.9);
+}
+
+.message-input {
+    flex: 1;
+    padding: 10px 0;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    outline: none;
+}
+
+.send-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.send-btn:active {
+    transform: scale(0.95);
+}
+
+.send-btn i {
+    font-size: 20px;
+    color: white;
+}
+
+/* Панель вложений */
+.attach-panel {
+    position: absolute;
+    bottom: 80px;
+    left: 16px;
+    right: 16px;
+    background: white;
+    border-radius: 20px;
+    padding: 12px;
+    display: none;
+    gap: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    z-index: 20;
+    border: 1px solid rgba(244, 29, 145, 0.1);
+}
+
+.attach-panel.show {
+    display: flex;
+}
+
+.attach-option {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 8px;
+    background: #f8f9fa;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.attach-option:active {
+    background: #e0e0e0;
+    transform: scale(0.95);
+}
+
+.attach-option i {
+    font-size: 24px;
+    color: #F41D91;
+}
+
+.attach-option span {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Меню чата */
+.chat-menu {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 280px;
+    height: 100%;
+    background: white;
+    z-index: 100;
+    transition: right 0.3s ease;
+    box-shadow: -2px 0 20px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-menu.open {
+    right: 0;
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.menu-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+}
+
+.menu-header i {
+    font-size: 22px;
+    color: #999;
+    cursor: pointer;
+}
+
+.menu-content {
+    flex: 1;
+    padding: 16px;
+}
+
+.event-detail-card {
+    display: flex;
+    gap: 14px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 16px;
+    margin-bottom: 20px;
+}
+
+.event-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.event-icon i {
+    font-size: 24px;
+    color: white;
+}
+
+.event-detail-info h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.event-detail-info p {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 2px;
+}
+
+.section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 12px;
+}
+
+.participants-section {
+    margin-bottom: 20px;
+}
+
+.participant-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.participant-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #F41D91 0%, #F2711E 100%);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.participant-info {
+    flex: 1;
+}
+
+.participant-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.participant-role {
+    font-size: 11px;
+    color: #F41D91;
+}
+
+.leave-chat-btn {
+    width: 100%;
+    padding: 14px;
+    background: none;
+    border: 1px solid #ff4444;
+    border-radius: 30px;
+    color: #ff4444;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    margin-top: auto;
+}
+
+.leave-chat-btn:active {
+    background: #ffebee;
+}
+
+/* Оверлей */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    z-index: 99;
+    display: none;
+}
+
+.overlay.show {
+    display: block;
+}

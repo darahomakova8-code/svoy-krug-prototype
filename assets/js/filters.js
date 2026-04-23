@@ -1,6 +1,7 @@
 // Состояние выбранных фильтров
 let selectedCategories = [];
 let selectedDistricts = [];
+let selectedSwipeCount = 5; // По умолчанию 5 вариантов
 
 // Категории мероприятий
 const categories = [
@@ -27,6 +28,28 @@ function initFilters() {
     document.getElementById('endDate').textContent = formattedDate;
     document.getElementById('minPrice').textContent = '300';
     document.getElementById('maxPrice').textContent = '2000';
+    
+    // Подсвечиваем кнопку по умолчанию (5)
+    updateSwipeCountDisplay(selectedSwipeCount);
+}
+
+// Установка количества вариантов через кнопки
+function setSwipeCount(value) {
+    selectedSwipeCount = value;
+    updateSwipeCountDisplay(value);
+    console.log('Выбрано количество вариантов:', value);
+}
+
+// Обновление отображения выбранного количества (подсветка активной кнопки)
+function updateSwipeCountDisplay(value) {
+    const buttons = document.querySelectorAll('.swipe-count-btn');
+    buttons.forEach(btn => {
+        btn.classList.remove('active');
+        const btnText = btn.textContent.trim();
+        if (btnText === value.toString()) {
+            btn.classList.add('active');
+        }
+    });
 }
 
 // Рендер категорий
@@ -108,7 +131,8 @@ function startSelection() {
         minPrice: document.getElementById('minPrice').textContent,
         maxPrice: document.getElementById('maxPrice').textContent,
         categories: selectedCategories,
-        districts: selectedDistricts
+        districts: selectedDistricts,
+        swipeCount: selectedSwipeCount
     };
     
     console.log('Выбранные фильтры:', filters);

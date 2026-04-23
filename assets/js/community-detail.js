@@ -1,62 +1,35 @@
+// ========== НАВИГАЦИЯ ==========
+function navigateTo(page) {
+    window.location.href = page;
+}
+
+// ========== БОКОВОЕ МЕНЮ ==========
+function toggleSideMenu() {
+    const sideMenu = document.getElementById('sideMenu');
+    const overlay = document.getElementById('overlay');
+    if (sideMenu && overlay) {
+        sideMenu.classList.toggle('open');
+        overlay.classList.toggle('show');
+    }
+}
+
 // Данные сообщества (получаем из localStorage)
 let currentCommunity = null;
 
-// Данные анкет
+// Базовые анкеты (тестовые)
 let anketasData = [
     {
-        id: 1,
+        id: 2,
         name: "Иван Иванов",
-        age: 27,
+        age: 25,
         gender: "male",
         verified: true,
-        eventTitle: "Просмотр \"Аватар\"",
+        eventTitle: "Поход в кино на \"Аватар\"",
         description: "Предлагаю сходить в кино на 3-ю часть Аватара, после поделиться впечатлением в кафе",
-        date: "2026-03-10",
-        location: "Мираж",
-        availableSeats: 5,
-        responses: 2,
-        interested: false
-    },
-    {
-        id: 2,
-        name: "Анна Смирнова",
-        age: 25,
-        gender: "female",
-        verified: true,
-        eventTitle: "Поход в кино на \"Дюну 2\"",
-        description: "Ищу компанию для просмотра Дюны 2. После обсудим в кофейне рядом",
-        date: "2026-03-12",
+        date: "2026-05-12",
         location: "Киностар",
         availableSeats: 3,
         responses: 5,
-        interested: false
-    },
-    {
-        id: 3,
-        name: "Дмитрий Петров",
-        age: 32,
-        gender: "male",
-        verified: false,
-        eventTitle: "Классика кино: \"Бегущий по лезвию\"",
-        description: "Показ культового фильма. Кто хочет обсудить после просмотра?",
-        date: "2026-03-15",
-        location: "Иллюзион",
-        availableSeats: 8,
-        responses: 3,
-        interested: false
-    },
-    {
-        id: 4,
-        name: "Екатерина Морозова",
-        age: 29,
-        gender: "female",
-        verified: true,
-        eventTitle: "Фестиваль короткометражек",
-        description: "Ищу компанию на фестиваль короткометражного кино. Будет интересно!",
-        date: "2026-03-18",
-        location: "Центр документального кино",
-        availableSeats: 2,
-        responses: 7,
         interested: false
     }
 ];
@@ -66,25 +39,24 @@ let currentGenderFilter = "any";
 let currentAgeMin = 18;
 let currentAgeMax = 99;
 let currentDateStart = "2026-03-10";
-let currentDateEnd = "2026-03-20";
+let currentDateEnd = "2026-12-31";
 
 // Загрузка данных сообщества
 function loadCommunityData() {
     const communityId = localStorage.getItem('selectedCommunityId');
-    if (!communityId) {
-        console.log('ID сообщества не найден');
-        return;
-    }
     
-    // Здесь можно загружать данные с сервера или из массива
-    // Пока используем заглушку для Киноклуба
-    currentCommunity = {
-        id: parseInt(communityId),
-        name: "Киноклуб",
-        members: 800,
-        rating: 4.8,
-        description: "Смотрим и обсуждаем лучшее кино. Место для тех, кто любит думать и говорить о фильмах."
+    // Данные сообществ
+    const communities = {
+        1: { id: 1, name: "Киноклуб", members: 800, rating: 4.8, description: "Смотрим и обсуждаем лучшее кино. Место для тех, кто любит думать и говорить о фильмах." },
+        2: { id: 2, name: "Беговой круг", members: 450, rating: 4.9, description: "Совместные пробежки, марафоны и спортивные челленджи." },
+        3: { id: 3, name: "Книжный круг", members: 620, rating: 4.7, description: "Читаем, обсуждаем книги, устраиваем литературные вечера." }
     };
+    
+    if (communityId) {
+        currentCommunity = communities[communityId] || communities[1];
+    } else {
+        currentCommunity = communities[1];
+    }
     
     // Обновляем заголовок
     const titleElement = document.querySelector('.detail-header h1');
@@ -103,37 +75,65 @@ function loadCommunityData() {
     if (descElement) descElement.textContent = currentCommunity.description;
 }
 
+// Загрузка анкет из localStorage
+function loadAnketasFromStorage() {
+    const savedAnketas = JSON.parse(localStorage.getItem('userAnketas') || '[]');
+    
+    // Преобразуем сохранённые анкеты в формат для отображения
+    const formattedAnketas = savedAnketas.map(anketa => ({
+        id: anketa.id,
+        name: "Вы",
+        age: 25,
+        gender: anketa.gender || "any",
+        verified: true,
+        eventTitle: anketa.eventTitle,
+        description: anketa.description,
+        date: anketa.date,
+        location: anketa.location,
+        availableSeats: anketa.availableSeats || 2,
+        responses: anketa.requests?.length || 0,
+        interested: false,
+        isOwn: true
+    }));
+    
+    // Объединяем с тестовыми данными
+    anketasData = [...formattedAnketas, ...anketasData];
+}
+
 // Рендер анкет
 function renderAnketas() {
     let filtered = [...anketasData];
-
-    // Фильтр по полу
+    
+    // Фильтр по полу (только для не своих анкет)
     if (currentGenderFilter !== "any") {
-        filtered = filtered.filter(a => a.gender === currentGenderFilter);
+        filtered = filtered.filter(a => a.isOwn || a.gender === currentGenderFilter);
     }
-
+    
     // Фильтр по возрасту
     filtered = filtered.filter(a => a.age >= currentAgeMin && a.age <= currentAgeMax);
-
+    
     // Фильтр по дате
     filtered = filtered.filter(a => a.date >= currentDateStart && a.date <= currentDateEnd);
-
+    
     const container = document.getElementById("anketasList");
-    if (!container) return;
-
+    if (!container) {
+        console.error('Контейнер anketasList не найден');
+        return;
+    }
+    
     if (filtered.length === 0) {
         container.innerHTML = `
             <div class="empty-state">
                 <i class="bi bi-inbox"></i>
                 <p>Нет активных анкет</p>
-                <p style="font-size: 12px; margin-top: 8px;">Попробуйте изменить фильтры</p>
+                <p style="font-size: 12px; margin-top: 8px;">Попробуйте изменить фильтры или создайте свою анкету</p>
             </div>
         `;
         return;
     }
-
+    
     container.innerHTML = filtered.map(anketa => `
-        <div class="anketa-card">
+        <div class="anketa-card" onclick="viewAnketa(${anketa.id})">
             <div class="anketa-author">
                 <div class="author-avatar">
                     <i class="bi bi-person-fill"></i>
@@ -142,6 +142,7 @@ function renderAnketas() {
                     <div class="author-name">
                         ${escapeHtml(anketa.name)}
                         ${anketa.verified ? '<i class="bi bi-patch-check-fill verified-badge"></i>' : ''}
+                        ${anketa.isOwn ? '<span class="own-badge">Вы</span>' : ''}
                     </div>
                     <div class="author-age">${anketa.age} лет</div>
                 </div>
@@ -159,44 +160,66 @@ function renderAnketas() {
                 </div>
                 <div class="detail-item">
                     <i class="bi bi-people"></i>
-                    <span>${anketa.availableSeats} доступных места</span>
+                    <span>${anketa.availableSeats} мест</span>
                 </div>
             </div>
             <div class="event-footer">
-                <div class="responses-count">${anketa.responses} ответа</div>
-                <button class="interested-btn" onclick="markInterested(${anketa.id})">
-                    ${anketa.interested ? '✓ Отмечено' : 'Мне интересно'}
-                </button>
+                <div class="responses-count">${anketa.responses} откликов</div>
+                ${anketa.isOwn ? 
+                    `<button class="view-btn" onclick="event.stopPropagation(); viewMyAnketa(${anketa.id})">Смотреть</button>` :
+                    `<button class="interested-btn" onclick="event.stopPropagation(); markInterested(${anketa.id})">
+                        ${anketa.interested ? '✓ Отмечено' : 'Мне интересно'}
+                    </button>`
+                }
             </div>
         </div>
     `).join("");
 }
 
+// Просмотр анкеты
+function viewAnketa(id) {
+    const anketa = anketasData.find(a => a.id === id);
+    if (anketa) {
+        localStorage.setItem('viewEventId', id);
+        window.location.href = 'event-view.html';
+    }
+}
+
+// Просмотр своей анкеты
+function viewMyAnketa(id) {
+    localStorage.setItem('selectedEventId', id);
+    window.location.href = 'event-detail.html';
+}
+
 // Форматирование даты
 function formatDate(dateStr) {
+    if (!dateStr) return '—';
     const parts = dateStr.split('-');
-    return `${parts[2]}.${parts[1]}.${parts[0]}`;
+    if (parts.length === 3) {
+        return `${parts[2]}.${parts[1]}.${parts[0]}`;
+    }
+    return dateStr;
 }
 
 // Экранирование HTML
 function escapeHtml(str) {
     if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
-    });
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }
 
 // Возврат на список сообществ
 function goBack() {
-    window.location.href = 'feed.html';
+    window.history.back();
 }
 
-// Функция "Найти компанию" (будет прорабатываться позже)
+// Переход на страницу создания анкеты
 function openFindPartner() {
-    alert('Функция «Найти компанию» будет в следующем этапе');
+    window.location.href = 'create-anketa.html';
 }
 
 // Переключение панели фильтров
@@ -222,35 +245,57 @@ function applyAnketaFilters() {
     const ageMaxInput = document.getElementById('ageMax');
     const dateStartInput = document.getElementById('dateStart');
     const dateEndInput = document.getElementById('dateEnd');
-
-    currentAgeMin = parseInt(ageMinInput.value) || 18;
-    currentAgeMax = parseInt(ageMaxInput.value) || 99;
-    currentDateStart = dateStartInput.value;
-    currentDateEnd = dateEndInput.value;
-
+    
+    currentAgeMin = parseInt(ageMinInput?.value) || 18;
+    currentAgeMax = parseInt(ageMaxInput?.value) || 99;
+    currentDateStart = dateStartInput?.value || "2026-03-10";
+    currentDateEnd = dateEndInput?.value || "2026-12-31";
+    
     renderAnketas();
     
-    // Скрываем панель фильтров после применения
     const panel = document.getElementById('anketaFilterPanel');
     if (panel) {
         panel.classList.remove('show');
     }
 }
 
-// Отметка "Мне интересно"
+// Отметка "Мне интересно" — переход на страницу заполнения анкеты
 function markInterested(anketaId) {
     const anketa = anketasData.find(a => a.id === anketaId);
     if (anketa) {
-        // Сохраняем ID мероприятия и переходим на страницу просмотра
-        localStorage.setItem('viewEventId', anketaId);
-        window.location.href = 'event-view.html';
+        // Сохраняем ID мероприятия, на которое откликается пользователь
+        localStorage.setItem('applyEventId', anketaId);
+        localStorage.setItem('applyEventTitle', anketa.eventTitle);
+        localStorage.setItem('applyEventOrganizer', anketa.name);
+        
+        // Переход на страницу заполнения анкеты
+        window.location.href = 'apply-form.html';
     }
 }
 
 // Инициализация страницы
 function initCommunityDetailPage() {
     loadCommunityData();
+    loadAnketasFromStorage();
     renderAnketas();
+    
+    // Устанавливаем даты по умолчанию в фильтрах
+    const today = new Date().toISOString().split('T')[0];
+    const dateStartInput = document.getElementById('dateStart');
+    const dateEndInput = document.getElementById('dateEnd');
+    if (dateStartInput) dateStartInput.value = today;
+    if (dateEndInput) {
+        const nextMonth = new Date();
+        nextMonth.setMonth(nextMonth.getMonth() + 1);
+        dateEndInput.value = nextMonth.toISOString().split('T')[0];
+    }
+    
+    // Закрытие меню при клике на пункты
+    document.querySelectorAll('.side-menu-item').forEach(item => {
+        item.addEventListener('click', () => {
+            setTimeout(() => toggleSideMenu(), 150);
+        });
+    });
 }
 
 // Запуск после загрузки DOM
@@ -258,9 +303,4 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initCommunityDetailPage);
 } else {
     initCommunityDetailPage();
-}
-
-// Функция "Найти компанию" - переход на страницу создания анкеты
-function openFindPartner() {
-    window.location.href = 'create-anketa.html';
 }

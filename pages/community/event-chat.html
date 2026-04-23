@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Чат мероприятия — СвойКруг</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sofia+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../assets/css/event-chat.css">
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Шапка -->
+        <div class="chat-header">
+            <div class="header-left">
+                <div class="back-btn" onclick="goBack()">
+                    <i class="bi bi-arrow-left"></i>
+                </div>
+                <div class="event-info">
+                    <h2 id="eventTitle">Неаполитанская карусель</h2>
+                    <div class="participants-count" id="participantsCount">12 участников</div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="header-icon" onclick="toggleChatMenu()">
+                    <i class="bi bi-three-dots-vertical"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Область сообщений -->
+        <div class="messages-area" id="messagesArea">
+            <div id="messagesContainer"></div>
+        </div>
+
+        <!-- Поле ввода -->
+        <div class="message-input-area">
+            <div class="input-wrapper">
+                <button class="attach-btn" onclick="toggleAttachPanel()">
+                    <i class="bi bi-paperclip"></i>
+                </button>
+                <input type="text" class="message-input" id="messageInput" placeholder="Сообщение...">
+            </div>
+            <button class="send-btn" onclick="sendMessage()">
+                <i class="bi bi-send-fill"></i>
+            </button>
+        </div>
+
+        <!-- Панель вложений -->
+        <div class="attach-panel" id="attachPanel">
+            <div class="attach-option" onclick="sendPhoto()">
+                <i class="bi bi-image"></i>
+                <span>Фото</span>
+            </div>
+            <div class="attach-option" onclick="sendLocation()">
+                <i class="bi bi-geo-alt"></i>
+                <span>Локация</span>
+            </div>
+        </div>
+
+        <!-- Меню чата -->
+        <div class="chat-menu" id="chatMenu">
+            <div class="menu-header">
+                <h3>Информация</h3>
+                <i class="bi bi-x-lg" onclick="toggleChatMenu()"></i>
+            </div>
+            <div class="menu-content">
+                <div class="event-detail-card">
+                    <div class="event-icon">
+                        <i class="bi bi-calendar-event"></i>
+                    </div>
+                    <div class="event-detail-info">
+                        <h4 id="menuEventTitle">Неаполитанская карусель</h4>
+                        <p id="menuEventDate">28 марта, 19:00</p>
+                        <p id="menuEventLocation">ул. Кушелевская дорога, 6</p>
+                    </div>
+                </div>
+                <div class="participants-section">
+                    <div class="section-title">Участники (12)</div>
+                    <div id="participantsList"></div>
+                </div>
+                <button class="leave-chat-btn" onclick="leaveChat()">
+                    <i class="bi bi-box-arrow-right"></i> Покинуть чат
+                </button>
+            </div>
+        </div>
+        <div class="overlay" id="overlay" onclick="toggleChatMenu()"></div>
+    </div>
+
+    <script src="../../assets/js/event-chat.js"></script>
+</body>
+</html>

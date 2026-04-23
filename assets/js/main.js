@@ -1,9 +1,9 @@
-// Навигация
+// ========== НАВИГАЦИЯ ==========
 function navigateTo(page) {
     window.location.href = page;
 }
 
-// Боковое меню
+// ========== БОКОВОЕ МЕНЮ ==========
 function toggleSideMenu() {
     const sideMenu = document.getElementById('sideMenu');
     const overlay = document.getElementById('overlay');
@@ -13,7 +13,7 @@ function toggleSideMenu() {
     }
 }
 
-// Сторис
+// ========== СТОРИС ==========
 function showStory(storyId) {
     const stories = {
         1: () => window.location.href = 'pages/instruction.html',
@@ -23,22 +23,14 @@ function showStory(storyId) {
     };
     
     const story = stories[storyId];
-    if (story) {
-        story();
-    }
+    if (story) story();
 }
 
-// Плашка-приветствие
-let toastTimeout;
-
+// ========== ПЛАШКА-ПРИВЕТСТВИЕ ==========
 function showWelcomeToast() {
     const toast = document.getElementById('welcomeToast');
-    // Проверяем, что это прямой вход на index.html (не через навигацию внутри приложения)
-    // и что плашка еще не показывалась
     if (toast && !localStorage.getItem('welcomeToastShown') && !sessionStorage.getItem('appNavigated')) {
-        setTimeout(() => {
-            toast.classList.add('show');
-        }, 5000);
+        setTimeout(() => toast.classList.add('show'), 5000);
     }
 }
 
@@ -51,60 +43,192 @@ function closeWelcomeToast() {
 }
 
 function highlightStories() {
-    // Закрываем плашку
     closeWelcomeToast();
-    
-    // Подсвечиваем первые ТРИ сторис (индексы 0, 1, 2)
     const storyItems = document.querySelectorAll('.story-item');
-    
     storyItems.forEach((item, index) => {
-        if (index === 0 || index === 1 || index === 2) {
-            item.classList.add('highlight');
-        }
+        if (index < 3) item.classList.add('highlight');
     });
-    
-    // Через 2 секунды убираем подсветку
-    setTimeout(() => {
-        storyItems.forEach(item => {
-            item.classList.remove('highlight');
-        });
-    }, 2000);
+    setTimeout(() => storyItems.forEach(item => item.classList.remove('highlight')), 2000);
 }
 
-// Закрытие меню при клике на ссылки внутри бокового меню
-document.addEventListener('DOMContentLoaded', () => {
-    // Закрываем меню при клике на любой пункт внутри бокового меню
-    const menuItems = document.querySelectorAll('.side-menu-item');
-    menuItems.forEach(item => {
-        item.addEventListener('click', () => {
-            setTimeout(() => {
-                toggleSideMenu();
-            }, 150);
+// ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+// ========== ОТОБРАЖЕНИЕ МОИХ СОБЫТИЙ ==========
+function renderMyEvents() {
+    const container = document.getElementById('homeEventsContainer');
+    if (!container) return;
+    
+    const myEvents = JSON.parse(localStorage.getItem('userAnketas') || '[]');
+    const myApplications = JSON.parse(localStorage.getItem('myApplications') || '[]');
+    
+    let html = '';
+    let hasContent = false;
+    
+    // Мои мероприятия (я организатор)
+    const sortedEvents = [...myEvents].sort((a, b) => b.id - a.id).slice(0, 3);
+    sortedEvents.forEach(event => {
+        hasContent = true;
+        const day = event.date ? new Date(event.date).getDate() : '?';
+        const month = event.date ? new Date(event.date).toLocaleDateString('ru-RU', { month: 'short' }).replace('.', '') : '';
+        html += `
+            <div class="home-event-card" onclick="navigateTo('pages/community/event-detail.html?id=${event.id}')">
+                <div class="home-event-header">
+                    <span class="home-event-title">${escapeHtml(event.eventTitle)}</span>
+                    <span class="home-event-badge organizer">Организатор</span>
+                </div>
+                <div class="home-event-meta">
+                    <span><i class="bi bi-calendar"></i> ${day} ${month}</span>
+                    <span><i class="bi bi-people"></i> ${event.availableSeats || 0} мест</span>
+                </div>
+            </div>
+        `;
+    });
+    
+    // Мои заявки на чужие мероприятия
+    const remainingSlots = 3 - sortedEvents.length;
+    if (remainingSlots > 0) {
+        const myApps = [...myApplications]
+            .filter(app => app.status === 'pending' || app.status === 'accepted')
+            .reverse()
+            .slice(0, remainingSlots);
+        
+        myApps.forEach(app => {
+            hasContent = true;
+            
+            // Фиксированные значения для демонстрации
+            const day = '10';
+            const month = 'мая';
+            const organizer = 'Иван';
+            
+            const statusText = app.status === 'pending' ? 'Ожидает' : 'Одобрено';
+            const statusClass = app.status === 'pending' ? 'pending' : 'participant';
+            
+            html += `
+                <div class="home-event-card" onclick="navigateTo('pages/community/my-anketas.html?tab=requests')">
+                    <div class="home-event-header">
+                        <span class="home-event-title">${escapeHtml(app.eventTitle)}</span>
+                        <span class="home-event-badge ${statusClass}">${statusText}</span>
+                    </div>
+                    <div class="home-event-meta">
+                        <span><i class="bi bi-calendar"></i> ${day} ${month}</span>
+                        <span><i class="bi bi-person"></i> Орг: ${organizer}</span>
+                    </div>
+                </div>
+            `;
         });
-    });
-    
-    // Обновляем активный пункт нижнего меню
-    const navItems = document.querySelectorAll('.nav-icon-item');
-    const currentPage = window.location.pathname.split('/').pop();
-    
-    // Убираем активный класс у всех
-    navItems.forEach(item => {
-        item.classList.remove('active');
-    });
-    
-    // Индекс 1 - это домик (второй элемент)
-    if (currentPage === 'index.html' || currentPage === '' || currentPage === '/') {
-        if (navItems[1]) {
-            navItems[1].classList.add('active');
-        }
     }
     
-    // Домик (вторая иконка)
+    if (!hasContent) {
+        html = `<div class="home-empty-events"><p>У вас пока нет активных событий</p></div>`;
+    }
+    
+    container.innerHTML = html;
+}
+
+// ========== РЕКОМЕНДАЦИИ ==========
+const recommendedEvents = [
+    { id: 101, title: 'Неаполитанская карусель', category: 'Концерт', date: '28 марта', time: '19:00', price: '1500 ₽', imageIcon: 'bi-music-note-beamed' },
+    { id: 102, title: 'Вечер джаза', category: 'Концерт', date: '29 марта', time: '20:00', price: '1200 ₽', imageIcon: 'bi-vinyl' },
+    { id: 103, title: 'Арт-выставка «Импрессионизм»', category: 'Искусство', date: '30 марта', time: '11:00', price: '800 ₽', imageIcon: 'bi-palette' },
+    { id: 104, title: 'Мастер-класс по гончарному делу', category: 'Творчество', date: '31 марта', time: '15:00', price: '2000 ₽', imageIcon: 'bi-cup' }
+];
+
+function renderRecommendations() {
+    const container = document.getElementById('recommendationsGrid');
+    if (!container) return;
+    
+    container.innerHTML = recommendedEvents.map(event => `
+        <div class="recommendation-card">
+            <div class="recommendation-image" onclick="viewRecommendation(${event.id})">
+                <i class="bi ${event.imageIcon}"></i>
+                <span class="recommendation-category">${event.category}</span>
+            </div>
+            
+            <div class="recommendation-info" onclick="viewRecommendation(${event.id})">
+                <div class="recommendation-title">${event.title}</div>
+                <div class="recommendation-meta">
+                    <span><i class="bi bi-calendar"></i> ${event.date}</span>
+                    <span><i class="bi bi-clock"></i> ${event.time}</span>
+                </div>
+                <div class="recommendation-meta">
+                    <span><i class="bi bi-wallet2"></i> ${event.price}</span>
+                </div>
+            </div>
+            
+            <!-- Маленький крестик в правом верхнем углу -->
+            <button class="rec-dislike-btn" onclick="event.stopPropagation(); dislikeRecommendation(${event.id})" title="Скрыть">
+                <i class="bi bi-x"></i>
+            </button>
+            
+            <!-- Чат и сердечко в правом нижнем углу -->
+            <div class="rec-actions-right">
+                <button class="rec-action-btn rec-chat-btn" onclick="event.stopPropagation(); openEventChat(${event.id})" title="Чат мероприятия">
+                    <i class="bi bi-chat-dots"></i>
+                </button>
+                <button class="rec-action-btn rec-like-btn" onclick="event.stopPropagation(); likeRecommendation(${event.id})" title="Нравится">
+                    <i class="bi bi-heart"></i>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Открытие чата мероприятия
+function openEventChat(eventId) {
+    localStorage.setItem('selectedChatEventId', eventId);
+    window.location.href = 'pages/community/event-chat.html';
+}
+
+function viewRecommendation(id) {
+    const event = recommendedEvents.find(e => e.id === id);
+    if (event) alert(`${event.title}\n${event.date} в ${event.time}\n${event.price}`);
+}
+
+function likeRecommendation(id) {
+    const event = recommendedEvents.find(e => e.id === id);
+    if (event) {
+        alert(`"${event.title}" добавлено в избранное`);
+    }
+}
+
+function dislikeRecommendation(id) {
+    const index = recommendedEvents.findIndex(e => e.id === id);
+    if (index !== -1) {
+        const event = recommendedEvents[index];
+        recommendedEvents.splice(index, 1);
+        renderRecommendations();
+        alert(`✕ "${event.title}" скрыто`);
+    }
+}
+
+// ========== ИНИЦИАЛИЗАЦИЯ ==========
+document.addEventListener('DOMContentLoaded', () => {
+    // Закрытие меню при клике на пункты
+    document.querySelectorAll('.side-menu-item').forEach(item => {
+        item.addEventListener('click', () => setTimeout(() => toggleSideMenu(), 150));
+    });
+    
+    // Активный пункт нижнего меню
+    const navItems = document.querySelectorAll('.nav-icon-item');
+    const currentPage = window.location.pathname.split('/').pop();
+    navItems.forEach(item => item.classList.remove('active'));
+    if (currentPage === 'index.html' || currentPage === '' || currentPage === '/') {
+        if (navItems[1]) navItems[1].classList.add('active');
+    }
+    
     const homeNavItem = navItems[1];
     if (homeNavItem) {
         homeNavItem.removeAttribute('onclick');
         homeNavItem.addEventListener('click', () => {
-            // Устанавливаем флаг, что это навигация внутри приложения
             sessionStorage.setItem('appNavigated', 'true');
             navItems.forEach(item => item.classList.remove('active'));
             homeNavItem.classList.add('active');
@@ -112,14 +236,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // Проверяем, был ли переход на главную из другого места
-    // Если да, то не показываем плашку
-    if (sessionStorage.getItem('appNavigated')) {
-        // Не показываем плашку
-    } else {
-        // Показываем плашку только при первом открытии
-        showWelcomeToast();
-    }
+    // Плашка-приветствие
+    if (!sessionStorage.getItem('appNavigated')) showWelcomeToast();
     
-    console.log('СвойКруг готов!');
+    // Рендер
+    renderMyEvents();
+    renderRecommendations();
 });

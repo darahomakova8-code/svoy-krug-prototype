@@ -1,247 +1,177 @@
 // Данные сообществ
-const communitiesData = [
-    { 
-        id: 1, 
-        name: "Киноклуб", 
-        category: "cinema", 
-        members: 800, 
-        description: "Смотрим и обсуждаем лучшее кино. Место для тех, кто любит думать и говорить о фильмах.", 
-        status: "Active",
-        fullDescription: "Каждую неделю смотрим новый фильм и обсуждаем его. У нас есть онлайн-встречи и офлайн-показы. Присоединяйтесь к любителям кино!",
-        membersList: [
-            { name: "Анна", role: "Администратор" },
-            { name: "Михаил", role: "Модератор" },
-            { name: "Екатерина", role: "Активный участник" },
-            { name: "Дмитрий", role: "Участник" }
-        ]
+const communities = [
+    {
+        id: 1,
+        name: 'Киноклуб',
+        category: 'cinema',
+        description: 'Смотрим и обсуждаем фильмы, ходим в кино вместе по выходным',
+        members: 128
     },
-    { 
-        id: 2, 
-        name: "Беговой клуб", 
-        category: "sport", 
-        members: 300, 
-        description: "Объединяемся для пробежек, делимся успехами и ставим новые рекорды. Бегать вместе — веселее!", 
-        status: "Active",
-        fullDescription: "Утренние пробежки в парке, участие в марафонах, челленджи и совместные тренировки. Любой уровень подготовки приветствуется!",
-        membersList: [
-            { name: "Сергей", role: "Тренер" },
-            { name: "Ольга", role: "Администратор" },
-            { name: "Иван", role: "Капитан команды" },
-            { name: "Мария", role: "Участник" }
-        ]
+    {
+        id: 2,
+        name: 'Беговой клуб',
+        category: 'sport',
+        description: 'Совместные пробежки, марафоны и спортивные челленджи',
+        members: 89
     },
-    { 
-        id: 3, 
-        name: "Team-билдинг", 
-        category: "team", 
-        members: 150, 
-        description: "Корпоративные игры, тимбилдинги и командные активности.", 
-        status: "Active",
-        fullDescription: "Организуем мероприятия для сплочения команд. Квесты, игры на доверие, выездные мероприятия.",
-        membersList: [
-            { name: "Алексей", role: "Организатор" },
-            { name: "Наталья", role: "Модератор" }
-        ]
-    },
-    { 
-        id: 4, 
-        name: "Книжный клуб", 
-        category: "books", 
-        members: 220, 
-        description: "Читаем классику и новинки, обсуждаем сюжеты и героев.", 
-        status: "Active",
-        fullDescription: "Раз в две недели выбираем книгу и обсуждаем её за чашкой чая. Любители чтения всех жанров!",
-        membersList: [
-            { name: "Елена", role: "Библиотекарь" },
-            { name: "Андрей", role: "Модератор" }
-        ]
-    },
-    { 
-        id: 5, 
-        name: "Музейный гид", 
-        category: "museums", 
-        members: 180, 
-        description: "Совместные походы в музеи и на выставки.", 
-        status: "Active",
-        fullDescription: "Раз в месяц посещаем новые выставки и музеи. Экскурсии, лекции и культурный досуг.",
-        membersList: [
-            { name: "Ирина", role: "Экскурсовод" },
-            { name: "Павел", role: "Организатор" }
-        ]
-    },
-    { 
-        id: 6, 
-        name: "Собаководы", 
-        category: "dogs", 
-        members: 420, 
-        description: "Гуляем с собаками, делимся советами по воспитанию.", 
-        status: "Active",
-        fullDescription: "Совместные прогулки, тренировки и обмен опытом. Для владельцев собак любых пород.",
-        membersList: [
-            { name: "Дарья", role: "Кинолог" },
-            { name: "Максим", role: "Модератор" }
-        ]
+    {
+        id: 3,
+        name: 'Книжный клуб',
+        category: 'books',
+        description: 'Читаем, обсуждаем книги, устраиваем литературные вечера',
+        members: 156
     }
 ];
 
-let currentCategory = "all";
-let currentSort = "default";
-let searchQuery = "";
+let filteredCommunities = [...communities];
+let currentCategory = 'all';
+let currentSort = 'default';
+let searchQuery = '';
 
-// Функция рендеринга сообществ
+// Рендер сообществ
 function renderCommunities() {
-    let filtered = [...communitiesData];
-
-    // Фильтр по категории
-    if (currentCategory !== "all") {
-        filtered = filtered.filter(c => c.category === currentCategory);
-    }
-
-    // Фильтр по поиску
-    if (searchQuery.trim() !== "") {
-        const query = searchQuery.toLowerCase();
-        filtered = filtered.filter(c => 
-            c.name.toLowerCase().includes(query) || 
-            c.description.toLowerCase().includes(query)
-        );
-    }
-
-    // Сортировка
-    if (currentSort === "members-asc") {
-        filtered.sort((a, b) => a.members - b.members);
-    } else if (currentSort === "members-desc") {
-        filtered.sort((a, b) => b.members - a.members);
-    }
-
-    const container = document.getElementById("communitiesList");
+    const container = document.getElementById('communitiesList');
     if (!container) return;
     
-    if (filtered.length === 0) {
+    if (filteredCommunities.length === 0) {
         container.innerHTML = `
             <div class="empty-state">
                 <i class="bi bi-people"></i>
-                <p>Ничего не найдено</p>
-                <p style="font-size: 12px; margin-top: 8px;">Попробуйте изменить фильтры</p>
+                <p>Сообщества не найдены</p>
             </div>
         `;
         return;
     }
-
-    container.innerHTML = filtered.map(community => `
-        <div class="community-card" onclick="openCommunityDetail(${community.id})">
-            <div class="community-header">
-                <div class="community-name">${escapeHtml(community.name)}</div>
-                <div class="community-status">● ${community.status}</div>
+    
+    container.innerHTML = filteredCommunities.map(community => `
+        <div class="community-card" onclick="openCommunity(${community.id})">
+            <div class="card-header">
+                <h3>${community.name}</h3>
             </div>
-            <div class="community-description">${escapeHtml(community.description)}</div>
-            <div class="community-footer">
-                <div class="community-date">
-                    <i class="bi bi-calendar"></i>
-                    <span>Основано: 2024</span>
+            <div class="card-description">${community.description}</div>
+            <div class="card-footer">
+                <div class="members-count">
+                    <i class="bi bi-people"></i>
+                    <span>${community.members} участников</span>
                 </div>
-                <div class="details-link">
+                <button class="details-btn" onclick="event.stopPropagation(); openCommunity(${community.id})">
                     Подробнее <i class="bi bi-arrow-right"></i>
-                </div>
+                </button>
             </div>
         </div>
-    `).join("");
+    `).join('');
 }
 
-// Функция открытия детальной страницы
-function openCommunityDetail(communityId) {
-    localStorage.setItem('selectedCommunityId', communityId);
-    window.location.href = 'detail.html';
+// Открыть сообщество
+function openCommunity(id) {
+    const community = communities.find(c => c.id === id);
+    if (community) {
+        localStorage.setItem('currentCommunity', JSON.stringify(community));
+        window.location.href = 'detail.html';
+    }
 }
 
-// Функция экранирования HTML
-function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
-    });
-}
-
-// Фильтрация по поиску
+// Фильтрация
 function filterCommunities() {
-    const searchInput = document.getElementById("searchInput");
-    if (searchInput) {
-        searchQuery = searchInput.value;
-    }
-    renderCommunities();
+    const searchInput = document.getElementById('searchInput');
+    searchQuery = searchInput ? searchInput.value.toLowerCase() : '';
+    applyFilters();
 }
 
-// Переключение панели фильтров
-function toggleFilterPanel() {
-    const panel = document.getElementById("filterPanel");
-    if (panel) {
-        panel.classList.toggle("show");
-    }
-}
-
-// Переключение поиска
-function toggleSearch() {
-    const container = document.getElementById("searchContainer");
-    const input = document.getElementById("searchInput");
-    if (container) {
-        if (container.style.display === "none" || !container.style.display) {
-            container.style.display = "block";
-            if (input) input.focus();
-        } else {
-            container.style.display = "none";
-            if (input) {
-                searchQuery = "";
-                input.value = "";
-                renderCommunities();
-            }
+function applyFilters() {
+    filteredCommunities = communities.filter(community => {
+        if (currentCategory !== 'all' && community.category !== currentCategory) {
+            return false;
         }
-    }
-}
-
-// Настройка фильтров
-function setupFilters() {
-    const categoryTags = document.querySelectorAll("#categoryFilters .filter-tag");
-    categoryTags.forEach(tag => {
-        tag.addEventListener("click", function() {
-            categoryTags.forEach(t => t.classList.remove("active"));
-            this.classList.add("active");
-            currentCategory = this.getAttribute("data-cat");
-            renderCommunities();
-        });
+        if (searchQuery && !community.name.toLowerCase().includes(searchQuery) && 
+            !community.description.toLowerCase().includes(searchQuery)) {
+            return false;
+        }
+        return true;
     });
-
-    const sortTags = document.querySelectorAll("#sortFilters .filter-tag");
-    sortTags.forEach(tag => {
-        tag.addEventListener("click", function() {
-            sortTags.forEach(t => t.classList.remove("active"));
-            this.classList.add("active");
-            currentSort = this.getAttribute("data-sort");
-            renderCommunities();
-        });
-    });
-}
-
-// Инициализация страницы сообществ
-function initCommunitiesPage() {
-    renderCommunities();
-    setupFilters();
     
-    document.addEventListener("click", function(e) {
-        const panel = document.getElementById("filterPanel");
-        const filterIcon = document.getElementById("filterIcon");
-        if (panel && panel.classList.contains("show") && 
-            !panel.contains(e.target) && 
-            filterIcon && !filterIcon.contains(e.target)) {
-            panel.classList.remove("show");
-        }
-    });
+    if (currentSort === 'members') {
+        filteredCommunities.sort((a, b) => b.members - a.members);
+    }
+    
+    renderCommunities();
 }
 
-// Запускаем инициализацию
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCommunitiesPage);
-} else {
-    initCommunitiesPage();
+// Меню
+function toggleMenu() {
+    const dropdown = document.getElementById('menuDropdown');
+    dropdown.classList.toggle('show');
+    
+    if (dropdown.classList.contains('show')) {
+        setTimeout(() => {
+            document.addEventListener('click', closeMenuOnClickOutside);
+        }, 0);
+    }
 }
+
+function closeMenuOnClickOutside(e) {
+    const dropdown = document.getElementById('menuDropdown');
+    const menuIcon = document.querySelector('.menu-icon');
+    if (dropdown && !dropdown.contains(e.target) && menuIcon && !menuIcon.contains(e.target)) {
+        dropdown.classList.remove('show');
+        document.removeEventListener('click', closeMenuOnClickOutside);
+    }
+}
+
+function openSearch() {
+    document.getElementById('menuDropdown').classList.remove('show');
+    document.getElementById('searchContainer').classList.add('show');
+    document.getElementById('searchInput').focus();
+}
+
+function toggleFilterPanel() {
+    document.getElementById('menuDropdown').classList.remove('show');
+    document.getElementById('filterPanel').classList.toggle('show');
+}
+
+function createCommunity() {
+    document.getElementById('menuDropdown').classList.remove('show');
+    alert('Функция «Создать сообщество» в разработке');
+}
+
+// Боковое меню
+function toggleSideMenu() {
+    const sideMenu = document.getElementById('sideMenu');
+    const overlay = document.getElementById('overlay');
+    sideMenu.classList.toggle('open');
+    overlay.classList.toggle('show');
+}
+
+// Навигация
+function navigateTo(page) {
+    window.location.href = page;
+}
+
+function goBack() {
+    window.history.back();
+}
+
+// Инициализация
+document.addEventListener('DOMContentLoaded', () => {
+    renderCommunities();
+    
+    const categoryTags = document.querySelectorAll('[data-cat]');
+    categoryTags.forEach(tag => {
+        tag.addEventListener('click', function() {
+            categoryTags.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            currentCategory = this.dataset.cat;
+            applyFilters();
+        });
+    });
+    
+    const sortTags = document.querySelectorAll('[data-sort]');
+    sortTags.forEach(tag => {
+        tag.addEventListener('click', function() {
+            sortTags.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            currentSort = this.dataset.sort;
+            applyFilters();
+        });
+    });
+});

@@ -114,25 +114,6 @@ function tryItNow() {
     window.location.href = 'choose-together.html';
 }
 
-// Показ всплывающей плашки (каждый раз при открытии)
-let floatingTimeout;
-
-function showFloatingCard() {
-    const card = document.getElementById('floatingCard');
-    const overlay = document.getElementById('floatingOverlay');
-    if (card) {
-        // Очищаем предыдущий таймер, если есть
-        if (floatingTimeout) {
-            clearTimeout(floatingTimeout);
-        }
-        // Показываем плашку через 3 секунды
-        floatingTimeout = setTimeout(() => {
-            card.classList.add('show');
-            overlay.classList.add('show');
-        }, 3000);
-    }
-}
-
 function closeFloatingCard() {
     const card = document.getElementById('floatingCard');
     const overlay = document.getElementById('floatingOverlay');
