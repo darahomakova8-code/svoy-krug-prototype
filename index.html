@@ -145,6 +145,23 @@
 
         </div>
 
+        <!-- Плашка-приветствие -->
+        <div class="welcome-toast" id="welcomeToast">
+            <button class="welcome-toast-close" onclick="closeWelcomeToast()">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <div class="welcome-toast-content">
+                <div class="welcome-toast-icon">
+                    <i class="bi bi-megaphone-fill"></i>
+                </div>
+                <div class="welcome-toast-text">
+                    <h4>Новые функции!</h4>
+                    <p>В сервисе появились три новые функции. Ознакомьтесь с инструкцией!</p>
+                    <button class="welcome-toast-btn" onclick="highlightStories()">Ознакомиться →</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Нижняя навигация -->
         <nav class="bottom-nav-icons">
             <div class="nav-icon-item" onclick="toggleSideMenu()"><i class="bi bi-list"></i></div>

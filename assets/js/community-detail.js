@@ -13,26 +13,27 @@ function toggleSideMenu() {
     }
 }
 
-// Данные сообщества (получаем из localStorage)
+// Данные сообщества
 let currentCommunity = null;
 
-// Базовые анкеты (тестовые)
-let anketasData = [
-    {
-        id: 2,
-        name: "Иван Иванов",
-        age: 25,
-        gender: "male",
-        verified: true,
-        eventTitle: "Поход в кино на \"Аватар\"",
-        description: "Предлагаю сходить в кино на 3-ю часть Аватара, после поделиться впечатлением в кафе",
-        date: "2026-05-12",
-        location: "Киностар",
-        availableSeats: 3,
-        responses: 5,
-        interested: false
-    }
-];
+// Иван Иванов — всегда есть
+const ivanAnketa = {
+    id: 2,
+    name: "Иван Иванов",
+    age: 25,
+    gender: "male",
+    verified: true,
+    eventTitle: "Поход в кино на \"Аватар\"",
+    description: "Предлагаю сходить в кино на 3-ю часть Аватара, после поделиться впечатлением в кафе",
+    date: "2026-05-12",
+    location: "Киностар",
+    availableSeats: 3,
+    responses: 5,
+    interested: false
+};
+
+// Список анкет: Иван + созданные пользователем
+let anketasData = [ivanAnketa];
 
 // Фильтры
 let currentGenderFilter = "any";
@@ -45,42 +46,31 @@ let currentDateEnd = "2026-12-31";
 function loadCommunityData() {
     const communityId = localStorage.getItem('selectedCommunityId');
     
-    // Данные сообществ
     const communities = {
-        1: { id: 1, name: "Киноклуб", members: 800, rating: 4.8, description: "Смотрим и обсуждаем лучшее кино. Место для тех, кто любит думать и говорить о фильмах." },
-        2: { id: 2, name: "Беговой круг", members: 450, rating: 4.9, description: "Совместные пробежки, марафоны и спортивные челленджи." },
-        3: { id: 3, name: "Книжный круг", members: 620, rating: 4.7, description: "Читаем, обсуждаем книги, устраиваем литературные вечера." }
+        1: { id: 1, name: "Киноклуб", members: 800, rating: 4.8, description: "Смотрим и обсуждаем лучшее кино." },
+        2: { id: 2, name: "Беговой круг", members: 450, rating: 4.9, description: "Совместные пробежки и марафоны." },
+        3: { id: 3, name: "Книжный круг", members: 620, rating: 4.7, description: "Читаем и обсуждаем книги." }
     };
     
-    if (communityId) {
-        currentCommunity = communities[communityId] || communities[1];
-    } else {
-        currentCommunity = communities[1];
-    }
+    currentCommunity = communities[communityId] || communities[1];
     
-    // Обновляем заголовок
     const titleElement = document.querySelector('.detail-header h1');
-    if (titleElement) {
-        titleElement.textContent = currentCommunity.name;
-    }
+    if (titleElement) titleElement.textContent = currentCommunity.name;
     
-    // Обновляем количество участников и рейтинг
     const membersElement = document.querySelector('.badge-item:first-child .badge-value');
     const ratingElement = document.querySelector('.badge-item:last-child .badge-value');
     if (membersElement) membersElement.textContent = currentCommunity.members;
     if (ratingElement) ratingElement.textContent = currentCommunity.rating + ' ★';
     
-    // Обновляем описание
     const descElement = document.querySelector('.community-description-text');
     if (descElement) descElement.textContent = currentCommunity.description;
 }
 
-// Загрузка анкет из localStorage
+// Загрузка созданных анкет из localStorage
 function loadAnketasFromStorage() {
     const savedAnketas = JSON.parse(localStorage.getItem('userAnketas') || '[]');
     
-    // Преобразуем сохранённые анкеты в формат для отображения
-    const formattedAnketas = savedAnketas.map(anketa => ({
+    const myAnketas = savedAnketas.map(anketa => ({
         id: anketa.id,
         name: "Вы",
         age: 25,
@@ -96,37 +86,30 @@ function loadAnketasFromStorage() {
         isOwn: true
     }));
     
-    // Объединяем с тестовыми данными
-    anketasData = [...formattedAnketas, ...anketasData];
+    // Иван всегда первый, потом мои анкеты
+    anketasData = [ivanAnketa, ...myAnketas];
 }
 
 // Рендер анкет
 function renderAnketas() {
     let filtered = [...anketasData];
     
-    // Фильтр по полу (только для не своих анкет)
     if (currentGenderFilter !== "any") {
         filtered = filtered.filter(a => a.isOwn || a.gender === currentGenderFilter);
     }
     
-    // Фильтр по возрасту
     filtered = filtered.filter(a => a.age >= currentAgeMin && a.age <= currentAgeMax);
-    
-    // Фильтр по дате
     filtered = filtered.filter(a => a.date >= currentDateStart && a.date <= currentDateEnd);
     
     const container = document.getElementById("anketasList");
-    if (!container) {
-        console.error('Контейнер anketasList не найден');
-        return;
-    }
+    if (!container) return;
     
     if (filtered.length === 0) {
         container.innerHTML = `
             <div class="empty-state">
                 <i class="bi bi-inbox"></i>
                 <p>Нет активных анкет</p>
-                <p style="font-size: 12px; margin-top: 8px;">Попробуйте изменить фильтры или создайте свою анкету</p>
+                <p style="font-size: 12px; margin-top: 8px;">Попробуйте изменить фильтры</p>
             </div>
         `;
         return;
@@ -176,7 +159,6 @@ function renderAnketas() {
     `).join("");
 }
 
-// Просмотр анкеты
 function viewAnketa(id) {
     const anketa = anketasData.find(a => a.id === id);
     if (anketa) {
@@ -185,61 +167,41 @@ function viewAnketa(id) {
     }
 }
 
-// Просмотр своей анкеты
 function viewMyAnketa(id) {
     localStorage.setItem('selectedEventId', id);
     window.location.href = 'event-detail.html';
 }
 
-// Форматирование даты
 function formatDate(dateStr) {
     if (!dateStr) return '—';
     const parts = dateStr.split('-');
-    if (parts.length === 3) {
-        return `${parts[2]}.${parts[1]}.${parts[0]}`;
-    }
-    return dateStr;
+    return parts.length === 3 ? `${parts[2]}.${parts[1]}.${parts[0]}` : dateStr;
 }
 
-// Экранирование HTML
 function escapeHtml(str) {
     if (!str) return '';
-    return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-// Возврат на список сообществ
 function goBack() {
     window.history.back();
 }
 
-// Переход на страницу создания анкеты
 function openFindPartner() {
     window.location.href = 'create-anketa.html';
 }
 
-// Переключение панели фильтров
 function toggleAnketaFilter() {
     const panel = document.getElementById('anketaFilterPanel');
-    if (panel) {
-        panel.classList.toggle('show');
-    }
+    if (panel) panel.classList.toggle('show');
 }
 
-// Выбор пола
 function selectGender(element, gender) {
-    document.querySelectorAll('.gender-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
+    document.querySelectorAll('.gender-btn').forEach(btn => btn.classList.remove('active'));
     element.classList.add('active');
     currentGenderFilter = gender;
 }
 
-// Применение фильтров
 function applyAnketaFilters() {
     const ageMinInput = document.getElementById('ageMin');
     const ageMaxInput = document.getElementById('ageMax');
@@ -254,45 +216,29 @@ function applyAnketaFilters() {
     renderAnketas();
     
     const panel = document.getElementById('anketaFilterPanel');
-    if (panel) {
-        panel.classList.remove('show');
-    }
+    if (panel) panel.classList.remove('show');
 }
 
-// Отметка "Мне интересно" — переход на страницу заполнения анкеты
 function markInterested(anketaId) {
-    // Сохраняем ID мероприятия
     localStorage.setItem('applyEventId', anketaId);
     
-    // Ищем анкету в данных
     let anketa = anketasData.find(a => a.id === anketaId);
-    
-    // Если не нашли — ищем в localStorage
     if (!anketa) {
-        const savedAnketas = JSON.parse(localStorage.getItem('userAnketas') || '[]');
-        anketa = savedAnketas.find(a => a.id === anketaId);
+        const saved = JSON.parse(localStorage.getItem('userAnketas') || '[]');
+        anketa = saved.find(a => a.id === anketaId);
     }
     
-    // Сохраняем данные мероприятия
-    if (anketa) {
-        localStorage.setItem('applyEventTitle', anketa.eventTitle || 'Мероприятие');
-        localStorage.setItem('applyEventOrganizer', anketa.name || 'Организатор');
-    } else {
-        localStorage.setItem('applyEventTitle', 'Мероприятие');
-        localStorage.setItem('applyEventOrganizer', 'Организатор');
-    }
+    localStorage.setItem('applyEventTitle', anketa?.eventTitle || 'Мероприятие');
+    localStorage.setItem('applyEventOrganizer', anketa?.name || 'Организатор');
     
-    // Всегда переходим на страницу заполнения анкеты
     window.location.href = 'apply-form.html';
 }
 
-// Инициализация страницы
 function initCommunityDetailPage() {
     loadCommunityData();
     loadAnketasFromStorage();
     renderAnketas();
     
-    // Устанавливаем даты по умолчанию в фильтрах
     const today = new Date().toISOString().split('T')[0];
     const dateStartInput = document.getElementById('dateStart');
     const dateEndInput = document.getElementById('dateEnd');
@@ -303,15 +249,11 @@ function initCommunityDetailPage() {
         dateEndInput.value = nextMonth.toISOString().split('T')[0];
     }
     
-    // Закрытие меню при клике на пункты
     document.querySelectorAll('.side-menu-item').forEach(item => {
-        item.addEventListener('click', () => {
-            setTimeout(() => toggleSideMenu(), 150);
-        });
+        item.addEventListener('click', () => setTimeout(() => toggleSideMenu(), 150));
     });
 }
 
-// Запуск после загрузки DOM
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initCommunityDetailPage);
 } else {
