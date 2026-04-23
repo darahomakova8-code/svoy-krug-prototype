@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Найти компанию — СвойКруг</title>
+    <title>Создать событие — СвойКруг</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../../assets/css/styles.css">
     <link rel="stylesheet" href="../../assets/css/create-anketa.css">
@@ -69,18 +69,18 @@
         <div class="overlay" id="overlay" onclick="toggleSideMenu()"></div>
 
         <div class="create-content">
-            <!-- Кнопка автозаполнения -->
+            <!-- Название сообщества -->
+            <div class="community-name-title" id="communityName">Киноклуб</div>
+
+            <!-- Подзаголовок -->
+            <div class="subtitle-left">
+                Введите информацию о мероприятии, куда хотите собрать компанию
+            </div>
+
+            <!-- Кнопка автозаполнения — теперь под подзаголовком -->
             <div class="auto-fill-btn" onclick="autoFillForm()">
                 <i class="bi bi-magic"></i>
                 <span>Автозаполнение</span>
-            </div>
-
-            <!-- Название сообщества (просто текст, без плашки) -->
-            <div class="community-name-title" id="communityName">Киноклуб</div>
-
-            <!-- Подзаголовок (выровнен влево) -->
-            <div class="subtitle-left">
-                Введите информацию о мероприятии, куда хотите собрать компанию
             </div>
 
             <!-- Блок 1: Название и описание -->
@@ -151,7 +151,6 @@
             <div class="white-card">
                 <div class="form-label">Пригласить друзей</div>
                 
-                <!-- Кнопка приглашения друга -->
                 <div class="invite-friend-row" onclick="openAddFriendsModal()">
                     <div class="plus-icon">
                         <i class="bi bi-plus-lg"></i>
@@ -159,12 +158,8 @@
                     <div class="invite-text">Пригласить друга</div>
                 </div>
 
-                <!-- Список приглашённых друзей -->
-                <div class="invited-friends-list" id="invitedFriendsList">
-                    <!-- Здесь будут появляться аватарки приглашённых друзей -->
-                </div>
+                <div class="invited-friends-list" id="invitedFriendsList"></div>
                 
-                <!-- Счётчик приглашённых -->
                 <div class="friends-counter" id="friendsCounter" style="display: none;">
                     <i class="bi bi-people-fill"></i>
                     <span id="friendsCount">0</span> участников
