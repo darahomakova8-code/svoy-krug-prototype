@@ -29,8 +29,9 @@ function showStory(storyId) {
 // ========== ПЛАШКА-ПРИВЕТСТВИЕ ==========
 function showWelcomeToast() {
     const toast = document.getElementById('welcomeToast');
-    if (toast && !localStorage.getItem('welcomeToastShown') && !sessionStorage.getItem('appNavigated')) {
-        setTimeout(() => toast.classList.add('show'), 5000);
+    // Убираем проверку на sessionStorage - показываем при каждом заходе на главную
+    if (toast && !localStorage.getItem('welcomeToastShown')) {
+        setTimeout(() => toast.classList.add('show'), 3000); // 3 секунды
     }
 }
 
@@ -38,8 +39,15 @@ function closeWelcomeToast() {
     const toast = document.getElementById('welcomeToast');
     if (toast) {
         toast.classList.remove('show');
+        // Сохраняем в localStorage, чтобы плашка не показывалась снова у этого пользователя
         localStorage.setItem('welcomeToastShown', 'true');
     }
+}
+
+// Функция для сброса плашки (если нужно показать снова)
+function resetWelcomeToast() {
+    localStorage.removeItem('welcomeToastShown');
+    location.reload();
 }
 
 function highlightStories() {
@@ -103,12 +111,9 @@ function renderMyEvents() {
         
         myApps.forEach(app => {
             hasContent = true;
-            
-            // Фиксированные значения для демонстрации
             const day = '10';
             const month = 'мая';
             const organizer = 'Иван';
-            
             const statusText = app.status === 'pending' ? 'Ожидает' : 'Одобрено';
             const statusClass = app.status === 'pending' ? 'pending' : 'participant';
             
@@ -164,12 +169,10 @@ function renderRecommendations() {
                 </div>
             </div>
             
-            <!-- Маленький крестик в правом верхнем углу -->
             <button class="rec-dislike-btn" onclick="event.stopPropagation(); dislikeRecommendation(${event.id})" title="Скрыть">
                 <i class="bi bi-x"></i>
             </button>
             
-            <!-- Чат и сердечко в правом нижнем углу -->
             <div class="rec-actions-right">
                 <button class="rec-action-btn rec-chat-btn" onclick="event.stopPropagation(); openEventChat(${event.id})" title="Чат мероприятия">
                     <i class="bi bi-chat-dots"></i>
@@ -182,7 +185,6 @@ function renderRecommendations() {
     `).join('');
 }
 
-// Открытие чата мероприятия
 function openEventChat(eventId) {
     localStorage.setItem('selectedChatEventId', eventId);
     window.location.href = 'pages/community/event-chat.html';
@@ -229,15 +231,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (homeNavItem) {
         homeNavItem.removeAttribute('onclick');
         homeNavItem.addEventListener('click', () => {
-            sessionStorage.setItem('appNavigated', 'true');
             navItems.forEach(item => item.classList.remove('active'));
             homeNavItem.classList.add('active');
             navigateTo('index.html');
         });
     }
     
-    // Плашка-приветствие
-    if (!sessionStorage.getItem('appNavigated')) showWelcomeToast();
+    // ПЛАШКА-ПРИВЕТСТВИЕ - показываем при каждом заходе на главную
+    // (но не чаще одного раза в 24 часа, если нужно - раскомментируйте localStorage проверку)
+    showWelcomeToast();
     
     // Рендер
     renderMyEvents();
