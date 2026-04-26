@@ -59,15 +59,24 @@ let events = [
 
 let currentIndex = 0;
 let selectedEvents = [];
+let votingCompleted = false;
 
 function renderEvent() {
     const container = document.getElementById('eventCard');
     const progressFill = document.getElementById('progressFill');
     const progressCounter = document.getElementById('progressCounter');
+    const actionButtons = document.getElementById('actionButtons');
     
     if (!container) return;
     
     if (currentIndex >= events.length) {
+        votingCompleted = true;
+        
+        // Скрываем кнопки действий
+        if (actionButtons) {
+            actionButtons.style.display = 'none';
+        }
+        
         // Показать сообщение о завершении
         container.innerHTML = `
             <div class="completion-message">
@@ -77,7 +86,20 @@ function renderEvent() {
                 <button class="completion-btn" onclick="finishVoting()">Завершить</button>
             </div>
         `;
+        
+        // Обновляем прогресс-бар до 100%
+        if (progressFill) {
+            progressFill.style.width = '100%';
+        }
+        if (progressCounter) {
+            progressCounter.textContent = `${events.length}/${events.length}`;
+        }
         return;
+    }
+    
+    // Показываем кнопки действий
+    if (actionButtons) {
+        actionButtons.style.display = 'flex';
     }
     
     const event = events[currentIndex];
@@ -125,6 +147,7 @@ function showDetails(eventId) {
 }
 
 function likeEvent() {
+    if (votingCompleted) return;
     if (currentIndex >= events.length) return;
     
     const currentEvent = events[currentIndex];
@@ -136,6 +159,7 @@ function likeEvent() {
 }
 
 function dislikeEvent() {
+    if (votingCompleted) return;
     if (currentIndex >= events.length) return;
     
     animateAndNext('dislike');
@@ -182,10 +206,12 @@ let touchStartX = 0;
 let touchEndX = 0;
 
 function handleTouchStart(e) {
+    if (votingCompleted) return;
     touchStartX = e.touches[0].clientX;
 }
 
 function handleTouchEnd(e) {
+    if (votingCompleted) return;
     touchEndX = e.changedTouches[0].clientX;
     const diff = touchEndX - touchStartX;
     const threshold = 50;

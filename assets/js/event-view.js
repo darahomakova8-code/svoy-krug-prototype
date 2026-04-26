@@ -110,6 +110,11 @@ function applyForEvent() {
         return;
     }
     
+    // Сохраняем данные мероприятия для apply-form
+    localStorage.setItem('applyEventId', currentEvent.id);
+    localStorage.setItem('applyEventTitle', currentEvent.eventTitle);
+    localStorage.setItem('applyEventOrganizer', currentEvent.author);
+    
     // Переходим на страницу заполнения заявки
     window.location.href = 'apply-form.html';
 }

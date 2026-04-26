@@ -219,19 +219,13 @@ function applyAnketaFilters() {
     if (panel) panel.classList.remove('show');
 }
 
+// Отметка "Мне интересно" — переход на страницу просмотра мероприятия
 function markInterested(anketaId) {
-    localStorage.setItem('applyEventId', anketaId);
+    // Сохраняем ID мероприятия для event-view
+    localStorage.setItem('viewEventId', anketaId);
     
-    let anketa = anketasData.find(a => a.id === anketaId);
-    if (!anketa) {
-        const saved = JSON.parse(localStorage.getItem('userAnketas') || '[]');
-        anketa = saved.find(a => a.id === anketaId);
-    }
-    
-    localStorage.setItem('applyEventTitle', anketa?.eventTitle || 'Мероприятие');
-    localStorage.setItem('applyEventOrganizer', anketa?.name || 'Организатор');
-    
-    window.location.href = 'apply-form.html';
+    // Переходим на страницу просмотра мероприятия
+    window.location.href = 'event-view.html';
 }
 
 function initCommunityDetailPage() {
