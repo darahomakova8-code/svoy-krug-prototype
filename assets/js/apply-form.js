@@ -5,29 +5,29 @@ let photos = [];
 
 // Загрузка данных мероприятия
 function loadEventData() {
-    const eventId = localStorage.getItem('viewEventId');
-    if (!eventId) {
-        alert('Мероприятие не найдено');
+    const eventId = localStorage.getItem('applyEventId') || localStorage.getItem('viewEventId');
+    const eventTitle = localStorage.getItem('applyEventTitle') || 'Мероприятие';
+    
+    if (!eventId && !eventTitle) {
         window.location.href = 'feed.html';
         return;
     }
     
     currentEvent = {
-        id: parseInt(eventId),
-        eventTitle: "Просмотр \"Аватар\""
+        id: eventId ? parseInt(eventId) : Date.now(),
+        eventTitle: eventTitle
     };
     
     document.getElementById('eventTitle').textContent = currentEvent.eventTitle;
 }
 
-// Автозаполнение (заглушка)
+// Автозаполнение
 function autoFill() {
     document.getElementById('firstName').value = 'Анна';
     document.getElementById('lastName').value = 'Погодина';
     document.getElementById('age').value = '18';
     document.getElementById('about').value = 'Люблю кино, увлекаюсь просмотром анимации';
     
-    // Выбираем пол "Женский"
     selectGender(document.querySelector('.gender-option[data-gender="female"]'), 'female');
 }
 
@@ -45,10 +45,9 @@ function addPhoto() {
         return;
     }
     
-    // Имитация добавления фото (в реальном приложении тут был бы input file)
     const newPhoto = {
         id: Date.now(),
-        url: null // заглушка
+        url: null
     };
     photos.push(newPhoto);
     renderPhotos();
@@ -67,7 +66,6 @@ function renderPhotos() {
     
     let html = '';
     
-    // Существующие фото
     photos.forEach(photo => {
         html += `
             <div class="photo-preview" style="background-color: #d0d0d0;">
@@ -78,7 +76,6 @@ function renderPhotos() {
         `;
     });
     
-    // Кнопка добавления (если меньше 3)
     if (photos.length < 3) {
         html += `
             <div class="photo-add" onclick="addPhoto()">
@@ -93,10 +90,10 @@ function renderPhotos() {
 
 // Отправка заявки
 function submitApplication() {
-    const firstName = document.getElementById('firstName').value;
-    const lastName = document.getElementById('lastName').value;
-    const age = document.getElementById('age').value;
-    const about = document.getElementById('about').value;
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const age = document.getElementById('age').value.trim();
+    const about = document.getElementById('about').value.trim();
     
     if (!firstName) {
         alert('Введите имя');
@@ -113,7 +110,7 @@ function submitApplication() {
         return;
     }
     
-    // Проверяем, не подавал ли пользователь уже заявку на это мероприятие
+    // Проверяем, не подавал ли пользователь уже заявку
     let appliedEvents = JSON.parse(localStorage.getItem('appliedEvents') || '[]');
     if (appliedEvents.includes(currentEvent.id)) {
         alert('Вы уже подавали заявку на это мероприятие. Удалите старую заявку в разделе "Мои запросы", чтобы подать новую.');
@@ -140,20 +137,17 @@ function submitApplication() {
     applications.push(application);
     localStorage.setItem('myApplications', JSON.stringify(applications));
     
-    // Отмечаем, что пользователь подал заявку на это мероприятие
+    // Отмечаем, что пользователь подал заявку
     appliedEvents.push(currentEvent.id);
     localStorage.setItem('appliedEvents', JSON.stringify(appliedEvents));
-    
-    console.log('Заявка отправлена, appliedEvents:', appliedEvents);
-    
-    alert(`Заявка на "${currentEvent.eventTitle}" отправлена!`);
     
     // Переходим в раздел "Мои запросы"
     window.location.href = 'my-anketas.html?tab=requests';
 }
+
 // Возврат
 function goBack() {
-    window.location.href = 'event-view.html';
+    window.history.back();
 }
 
 // Боковое меню

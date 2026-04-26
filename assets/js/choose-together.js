@@ -15,27 +15,6 @@ function loadChats() {
                 participants: 3,
                 avatar: "ПC",
                 createdAt: "2026-03-28"
-            },
-            {
-                id: 2,
-                name: "Новый год",
-                participants: 5,
-                avatar: "НГ",
-                createdAt: "2026-03-27"
-            },
-            {
-                id: 3,
-                name: "АР",
-                participants: 2,
-                avatar: "АР",
-                createdAt: "2026-03-26"
-            },
-            {
-                id: 4,
-                name: "Карта",
-                participants: 4,
-                avatar: "КА",
-                createdAt: "2026-03-25"
             }
         ];
         saveChats();

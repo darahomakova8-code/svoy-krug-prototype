@@ -89,7 +89,7 @@ function renderApplyButton() {
     if (!btn) return;
     
     if (hasApplied) {
-        btn.textContent = '✓ Заявка отправлена';
+        btn.textContent = 'Заявка отправлена';
         btn.classList.add('applied');
         btn.disabled = true;
         btn.style.opacity = '0.6';

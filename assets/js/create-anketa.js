@@ -158,6 +158,7 @@ function publishAnketa() {
     const ageMin = document.getElementById('ageMin')?.value || '18';
     const ageMax = document.getElementById('ageMax')?.value || '99';
     
+    // Подсказка валидации — оставляем
     if (!eventTitle || !description || !dateStart || !location) {
         alert('Заполните все обязательные поля');
         return;
@@ -201,9 +202,7 @@ function publishAnketa() {
     // Сохраняем ID созданного мероприятия
     localStorage.setItem('selectedEventId', newAnketa.id);
     
-    alert(`Анкета "${eventTitle}" опубликована!`);
-    
-    // Переход на страницу мероприятия
+    // Переход на страницу мероприятия без алерта
     window.location.href = 'event-detail.html';
 }
 
